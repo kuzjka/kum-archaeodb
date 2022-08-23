@@ -2,7 +2,8 @@ create sequence hibernate_sequence;
 
 create table items(
   id int primary key,
-  year int,
+  name varchar,
+  year_ int,
   number int,
   hectare int,
   depth int,
@@ -20,4 +21,4 @@ create table items(
 );
 create table bullets(id int primary key, deformed boolean, caliber int);
 create table categories(id int primary key, name varchar(255));
-create table category_filters(id int primary key, categiory_id int, filter varchar (511));
+create table category_filters(category_id int references categories, filter varchar (511));

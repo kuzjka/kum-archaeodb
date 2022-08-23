@@ -14,7 +14,8 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
-    private int name;
+    private String name;
+    @Column(name = "year_")
     private int year;
     private int number;
     private int hectare;
@@ -46,7 +47,7 @@ public class Item {
      * Gets item name.
      * @return  Name of the item
      */
-    public int getName() {
+    public String getName() {
         return name;
     }
 
@@ -54,7 +55,7 @@ public class Item {
      * Sets item name.
      * @param name  Name of the item
      */
-    public void setName(int name) {
+    public void setName(String name) {
         this.name = name;
     }
 
