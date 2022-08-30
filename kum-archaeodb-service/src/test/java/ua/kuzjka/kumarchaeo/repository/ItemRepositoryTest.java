@@ -5,11 +5,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import ua.kuzjka.kumarchaeo.model.Bullet;
 import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Item;
 import ua.kuzjka.kumarchaeo.model.Location;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -92,5 +94,30 @@ public class ItemRepositoryTest {
         repository.delete(item);
 
         assertEquals(0, repository.count());
+    }
+
+    @Test
+    public void testBulletAdded() {
+        Category bulletCategory = new Category();
+        bulletCategory.setName("Bullets");
+        categoryRepository.save(bulletCategory);
+
+        Bullet bullet = new Bullet();
+        bullet.setName("New Bullet");
+        bullet.setCaliber(14);
+        bullet.setCategory(bulletCategory);
+        bullet.setLocation(new Location(3.0f, 3.0f));
+
+        repository.save(bullet);
+
+        assertEquals(2, repository.count());
+
+        Optional<Item> item = repository.findAll()
+                .stream().filter(i -> "New Bullet".equals(i.getName()))
+                .findFirst();
+
+        assertTrue(item.isPresent());
+        assertTrue(item.get() instanceof Bullet);
+        assertEquals(14, ((Bullet) item.get()).getCaliber());
     }
 }

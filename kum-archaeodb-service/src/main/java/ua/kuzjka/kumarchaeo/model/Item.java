@@ -12,7 +12,7 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private Integer id;
 
     private String name;
     @Column(name = "year_")
@@ -39,8 +39,16 @@ public class Item {
      * Gets entity ID.
      * @return Entity ID
      */
-    public int getId() {
+    public Integer getId() {
         return id;
+    }
+
+    /**
+     * Sets entity ID.
+     * @param id    Entity ID
+     */
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     /**

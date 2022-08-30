@@ -20,5 +20,5 @@ create table items(
   image varchar(255)
 );
 create table bullets(id int primary key, deformed boolean, caliber int);
-create table categories(id int primary key, name varchar(255));
+create table categories(id int primary key, name varchar(255) unique);
 create table category_filters(category_id int references categories, filter varchar (511));
