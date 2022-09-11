@@ -10,7 +10,6 @@ import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Item;
 import ua.kuzjka.kumarchaeo.model.Location;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,7 +33,7 @@ public class ItemRepositoryTest {
         Item item = new Item();
         item.setName("Existing Item");
         item.setYear(2022);
-        item.setNumber(123);
+        item.setNumber("123");
         item.setHectare(2);
         item.setDepth(25);
         item.setLocation(location);
@@ -58,7 +57,7 @@ public class ItemRepositoryTest {
 
         assertEquals("Existing Item", item.getName());
         assertEquals(2022, item.getYear());
-        assertEquals(123, item.getNumber());
+        assertEquals("123", item.getNumber());
         assertEquals(2, item.getHectare());
         assertEquals(25, item.getDepth());
         assertEquals(1.0f, item.getLocation().getLatitude());
@@ -119,5 +118,20 @@ public class ItemRepositoryTest {
         assertTrue(item.isPresent());
         assertTrue(item.get() instanceof Bullet);
         assertEquals(14, ((Bullet) item.get()).getCaliber());
+    }
+
+    @Test
+    public void testGetByNumber() {
+        Optional<Item> item = repository.findByNumber("123");
+
+        assertTrue(item.isPresent());
+        assertEquals("Existing Item", item.get().getName());
+    }
+
+    @Test
+    public void testGetByNumberDoesntExist() {
+        Optional<Item> item = repository.findByNumber("100500");
+
+        assertFalse(item.isPresent());
     }
 }

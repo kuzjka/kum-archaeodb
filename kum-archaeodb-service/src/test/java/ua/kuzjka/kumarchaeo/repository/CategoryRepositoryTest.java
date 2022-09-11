@@ -60,4 +60,21 @@ public class CategoryRepositoryTest {
 
         assertEquals(0, repository.count());
     }
+
+    @Test
+    public void testFindByName() {
+        Optional<Category> category = repository.findByName("Existing Category");
+
+        assertTrue(category.isPresent());
+        assertEquals("Existing Category", category.get().getName());
+        assertTrue(category.get().getFilters().contains("Filter1"));
+        assertTrue(category.get().getFilters().contains("Filter2"));
+    }
+
+    @Test
+    public void testFindByNameDoesntExist() {
+        Optional<Category> category = repository.findByName("Non-existing name");
+
+        assertFalse(category.isPresent());
+    }
 }

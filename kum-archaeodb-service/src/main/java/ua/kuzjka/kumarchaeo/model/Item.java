@@ -17,16 +17,16 @@ public class Item {
     private String name;
     @Column(name = "year_")
     private int year;
-    private int number;
-    private int hectare;
-    private int depth;
+    private String number;
+    private Integer hectare;
+    private Integer depth;
     private Location location;
     private String description;
     private String material;
     private String technique;
     private String condition;
     private String dimensions;
-    private int weight;
+    private Integer weight;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -87,7 +87,7 @@ public class Item {
      * Gets inventory list number.
      * @return  Number in the inventory list
      */
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
@@ -95,7 +95,7 @@ public class Item {
      * Sets inventory list number.
      * @param number    Number in the inventory list
      */
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -103,7 +103,7 @@ public class Item {
      * Gets hectare where the item was found.
      * @return  Hectare number
      */
-    public int getHectare() {
+    public Integer getHectare() {
         return hectare;
     }
 
@@ -111,7 +111,7 @@ public class Item {
      * Sets hectare where the item was found.
      * @param hectare   Hectare number
      */
-    public void setHectare(int hectare) {
+    public void setHectare(Integer hectare) {
         this.hectare = hectare;
     }
 
@@ -119,7 +119,7 @@ public class Item {
      * Gets depth of the item.
      * @return  Depth in centimeters
      */
-    public int getDepth() {
+    public Integer getDepth() {
         return depth;
     }
 
@@ -127,7 +127,7 @@ public class Item {
      * Sets depth of the item.
      * @param depth Depth in centimeters
      */
-    public void setDepth(int depth) {
+    public void setDepth(Integer depth) {
         this.depth = depth;
     }
 
@@ -231,7 +231,7 @@ public class Item {
      * Gets item weight.
      * @return  Item weight in grams
      */
-    public int getWeight() {
+    public Integer getWeight() {
         return weight;
     }
 
@@ -239,7 +239,7 @@ public class Item {
      * Stes item weight.
      * @param weight    Item weight in grams
      */
-    public void setWeight(int weight) {
+    public void setWeight(Integer weight) {
         this.weight = weight;
     }
 

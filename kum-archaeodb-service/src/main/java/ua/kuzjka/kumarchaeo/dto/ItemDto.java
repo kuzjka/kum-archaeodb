@@ -7,16 +7,16 @@ public class ItemDto {
     private Integer id;
     private String name;
     private int year;
-    private int number;
-    private int hectare;
-    private int depth;
+    private String number;
+    private Integer hectare;
+    private Integer depth;
     private Location location;
     private String description;
     private String material;
     private String technique;
     private String condition;
     private String dimensions;
-    private int weight;
+    private Integer weight;
     private String remarks;
     private String imageFile;
 
@@ -68,27 +68,27 @@ public class ItemDto {
         this.year = year;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
-    public int getHectare() {
+    public Integer getHectare() {
         return hectare;
     }
 
-    public void setHectare(int hectare) {
+    public void setHectare(Integer hectare) {
         this.hectare = hectare;
     }
 
-    public int getDepth() {
+    public Integer getDepth() {
         return depth;
     }
 
-    public void setDepth(int depth) {
+    public void setDepth(Integer depth) {
         this.depth = depth;
     }
 
@@ -140,11 +140,11 @@ public class ItemDto {
         this.dimensions = dimensions;
     }
 
-    public int getWeight() {
+    public Integer getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(Integer weight) {
         this.weight = weight;
     }
 
