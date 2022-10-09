@@ -9,7 +9,6 @@ import javax.persistence.Table;
  */
 @Entity
 @DiscriminatorValue("B")
-@Table(name = "bullets")
 public class Bullet extends Item {
     private boolean deformed;
     private int caliber;

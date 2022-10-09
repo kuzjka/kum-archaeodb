@@ -5,10 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import ua.kuzjka.kumarchaeo.model.Bullet;
-import ua.kuzjka.kumarchaeo.model.Category;
-import ua.kuzjka.kumarchaeo.model.Item;
-import ua.kuzjka.kumarchaeo.model.Location;
+import ua.kuzjka.kumarchaeo.model.*;
 
 import java.util.Optional;
 
@@ -33,7 +30,7 @@ public class ItemRepositoryTest {
         Item item = new Item();
         item.setName("Existing Item");
         item.setYear(2022);
-        item.setNumber("123");
+        item.setPointNumber(new PointNumber(111));
         item.setHectare(2);
         item.setDepth(25);
         item.setLocation(location);
@@ -57,7 +54,7 @@ public class ItemRepositoryTest {
 
         assertEquals("Existing Item", item.getName());
         assertEquals(2022, item.getYear());
-        assertEquals("123", item.getNumber());
+        assertEquals(new PointNumber(111), item.getPointNumber());
         assertEquals(2, item.getHectare());
         assertEquals(25, item.getDepth());
         assertEquals(1.0f, item.getLocation().getLatitude());
@@ -78,6 +75,7 @@ public class ItemRepositoryTest {
 
         Item item = new Item();
         item.setName("My item");
+        item.setPointNumber(new PointNumber(123, 1));
         item.setLocation(new Location(1.0f, 1.0f));
         item.setCategory(category);
         repository.save(item);
@@ -103,6 +101,7 @@ public class ItemRepositoryTest {
 
         Bullet bullet = new Bullet();
         bullet.setName("New Bullet");
+        bullet.setPointNumber(new PointNumber(124, 2));
         bullet.setCaliber(14);
         bullet.setCategory(bulletCategory);
         bullet.setLocation(new Location(3.0f, 3.0f));
@@ -111,18 +110,18 @@ public class ItemRepositoryTest {
 
         assertEquals(2, repository.count());
 
-        Optional<Item> item = repository.findAll()
-                .stream().filter(i -> "New Bullet".equals(i.getName()))
-                .findFirst();
+        Optional<Item> item = repository.findByPointNumber(new PointNumber(124, 2));
 
         assertTrue(item.isPresent());
+        assertEquals("New Bullet", item.get().getName());
         assertTrue(item.get() instanceof Bullet);
+
         assertEquals(14, ((Bullet) item.get()).getCaliber());
     }
 
     @Test
     public void testGetByNumber() {
-        Optional<Item> item = repository.findByNumber("123");
+        Optional<Item> item = repository.findByPointNumber(new PointNumber(111));
 
         assertTrue(item.isPresent());
         assertEquals("Existing Item", item.get().getName());
@@ -130,7 +129,7 @@ public class ItemRepositoryTest {
 
     @Test
     public void testGetByNumberDoesntExist() {
-        Optional<Item> item = repository.findByNumber("100500");
+        Optional<Item> item = repository.findByPointNumber(new PointNumber(100500, 14));
 
         assertFalse(item.isPresent());
     }

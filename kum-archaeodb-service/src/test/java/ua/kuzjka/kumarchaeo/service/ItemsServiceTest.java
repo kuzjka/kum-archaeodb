@@ -7,6 +7,7 @@ import ua.kuzjka.kumarchaeo.dto.ItemDto;
 import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Item;
 import ua.kuzjka.kumarchaeo.model.Location;
+import ua.kuzjka.kumarchaeo.model.PointNumber;
 import ua.kuzjka.kumarchaeo.repository.CategoryRepository;
 import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
@@ -132,7 +133,7 @@ public class ItemsServiceTest {
         item.setId(125);
         item.setName("Item Name");
         item.setYear(2022);
-        item.setNumber("14");
+        item.setPointNumber(new PointNumber(14, 1));
         item.setHectare(5);
         item.setDepth(25);
         item.setLocation(new Location(1.2f, 3.4f));
@@ -153,7 +154,7 @@ public class ItemsServiceTest {
         assertEquals(125, dto.getId());
         assertEquals("Item Name", dto.getName());
         assertEquals(2022, dto.getYear());
-        assertEquals("14", dto.getNumber());
+        assertEquals("14/1", dto.getNumber());
         assertEquals(5, dto.getHectare());
         assertEquals(25, dto.getDepth());
         assertEquals(1.2f, dto.getLocation().getLatitude());

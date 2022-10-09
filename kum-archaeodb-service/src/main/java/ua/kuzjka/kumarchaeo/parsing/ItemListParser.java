@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import ua.kuzjka.kumarchaeo.dto.ItemParsingDto;
 import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Location;
+import ua.kuzjka.kumarchaeo.model.PointNumber;
 import ua.kuzjka.kumarchaeo.repository.CategoryRepository;
 import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
@@ -65,6 +66,13 @@ public class ItemListParser {
         List<ItemParsingDto> result = new ArrayList<>(entries.size());
 
         for (ItemListEntry entry : entries) {
+            PointNumber pointNumber;
+            try {
+                pointNumber = PointNumber.parseNumber(entry.getNumber());
+            } catch (IllegalArgumentException e) {
+                continue;
+            }
+
             ItemParsingDto item = new ItemParsingDto();
             item.setName(entry.getName());
             item.setNumber(entry.getNumber());
@@ -98,7 +106,7 @@ public class ItemListParser {
                 }
             }
 
-            if (itemRepository.findByNumber(entry.getNumber()).isPresent()) {
+            if (itemRepository.findByPointNumber(pointNumber).isPresent()) {
                 item.setNumberExists(true);
                 item.setSave(false);
             } else {

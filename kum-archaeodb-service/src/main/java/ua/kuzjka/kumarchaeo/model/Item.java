@@ -6,8 +6,10 @@ import javax.persistence.*;
  * Entity for an archaeological find.
  */
 @Entity
-@Table(name = "items")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "items", uniqueConstraints = {@UniqueConstraint(columnNames = {"number", "sub_number"})})
+@Inheritance
+@DiscriminatorColumn(name = "item_type")
+@DiscriminatorValue("I")
 public class Item {
 
     @Id
@@ -17,7 +19,7 @@ public class Item {
     private String name;
     @Column(name = "year_")
     private int year;
-    private String number;
+    private PointNumber pointNumber;
     private Integer hectare;
     private Integer depth;
     private Location location;
@@ -87,16 +89,16 @@ public class Item {
      * Gets inventory list number.
      * @return  Number in the inventory list
      */
-    public String getNumber() {
-        return number;
+    public PointNumber getPointNumber() {
+        return pointNumber;
     }
 
     /**
      * Sets inventory list number.
      * @param number    Number in the inventory list
      */
-    public void setNumber(String number) {
-        this.number = number;
+    public void setPointNumber(PointNumber number) {
+        this.pointNumber = number;
     }
 
     /**

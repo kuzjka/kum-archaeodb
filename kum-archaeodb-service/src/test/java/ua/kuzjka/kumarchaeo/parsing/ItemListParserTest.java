@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import ua.kuzjka.kumarchaeo.dto.ItemParsingDto;
 import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Item;
+import ua.kuzjka.kumarchaeo.model.PointNumber;
 import ua.kuzjka.kumarchaeo.repository.CategoryRepository;
 import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
@@ -44,7 +45,7 @@ public class ItemListParserTest {
 
     @Test
     public void testParse() throws IOException {
-        when(itemRepository.findByNumber(anyString())).thenReturn(Optional.empty());
+        when(itemRepository.findByPointNumber(any())).thenReturn(Optional.empty());
 
         InputStream in = getClass().getResourceAsStream("itemList.csv");
         List<ItemParsingDto> items = parser.parseCsv(in);
@@ -95,7 +96,7 @@ public class ItemListParserTest {
 
     @Test
     public void testParseExistingNumber() throws IOException {
-        when(itemRepository.findByNumber(anyString())).thenReturn(Optional.of(new Item()));
+        when(itemRepository.findByPointNumber(any())).thenReturn(Optional.of(new Item()));
 
         InputStream in = getClass().getResourceAsStream("itemList.csv");
         List<ItemParsingDto> items = parser.parseCsv(in);

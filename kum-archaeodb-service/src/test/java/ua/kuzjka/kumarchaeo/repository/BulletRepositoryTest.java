@@ -3,17 +3,16 @@ package ua.kuzjka.kumarchaeo.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import ua.kuzjka.kumarchaeo.model.Bullet;
-import ua.kuzjka.kumarchaeo.model.Category;
-import ua.kuzjka.kumarchaeo.model.Item;
-import ua.kuzjka.kumarchaeo.model.Location;
+import ua.kuzjka.kumarchaeo.model.*;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class BulletRepositoryTest {
     @Autowired
     private BulletRepository repository;
@@ -33,6 +32,7 @@ public class BulletRepositoryTest {
         Location location = new Location(1.0f, 1.0f);
 
         Bullet bullet = new Bullet();
+        bullet.setPointNumber(new PointNumber(111));
         bullet.setName("Bullet");
         bullet.setCategory(category);
         bullet.setLocation(location);
@@ -47,6 +47,7 @@ public class BulletRepositoryTest {
 
         Bullet bullet = repository.findAll().get(0);
         assertEquals("Bullet", bullet.getName());
+        assertEquals(new PointNumber(111), bullet.getPointNumber());
         assertEquals("Bullets", bullet.getCategory().getName());
         assertEquals(1.0f, bullet.getLocation().getLongitude());
         assertEquals(1.0f, bullet.getLocation().getLatitude());
@@ -69,6 +70,7 @@ public class BulletRepositoryTest {
         Category category = categoryRepository.findAll().get(0);
 
         Bullet newBullet = new Bullet();
+        newBullet.setPointNumber(new PointNumber(123));
         newBullet.setName("New Bullet");
         newBullet.setCaliber(17);
         newBullet.setDeformed(false);
@@ -77,10 +79,9 @@ public class BulletRepositoryTest {
         repository.save(newBullet);
 
         assertEquals(2, repository.count());
-        Optional<Bullet> bullet = repository.findAll().stream()
-                .filter(b -> "New Bullet".equals(b.getName()))
-                .findAny();
+        Optional<Bullet> bullet = repository.findByPointNumber(new PointNumber(123));
         assertTrue(bullet.isPresent());
+        assertEquals("New Bullet", bullet.get().getName());
         assertEquals(17, bullet.get().getCaliber());
         assertFalse(bullet.get().isDeformed());
     }

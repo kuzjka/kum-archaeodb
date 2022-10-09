@@ -29,7 +29,7 @@ public class ItemDto {
         id = item.getId();
         name = item.getName();
         year = item.getYear();
-        number = item.getNumber();
+        number = item.getPointNumber().toString();
         hectare = item.getHectare();
         depth = item.getDepth();
         location = item.getLocation();
