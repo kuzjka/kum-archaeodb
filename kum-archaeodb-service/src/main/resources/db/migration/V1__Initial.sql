@@ -16,14 +16,20 @@ create table items(
   technique varchar,
   condition varchar,
   dimensions varchar,
-  weight int,
+  weight real,
   category_id int,
   remarks varchar,
+  context int,
   image varchar(255),
+  museum_number varchar(255),
+  gps_point varchar(31),
 
   -- Bullet columns
-  deformed boolean,
   caliber int,
+  approximate boolean,
+  standard varchar(31),
+  deformed varchar(15),
+  imprints boolean,
 
   -- Constraints
   unique (number, sub_number)

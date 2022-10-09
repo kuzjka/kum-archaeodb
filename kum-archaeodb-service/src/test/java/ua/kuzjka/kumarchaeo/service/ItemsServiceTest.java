@@ -142,7 +142,7 @@ public class ItemsServiceTest {
         item.setTechnique("Die cast");
         item.setCondition("Oxidized");
         item.setDimensions("15x14x12");
-        item.setWeight(23);
+        item.setWeight(23f);
         item.setCategory(category);
         item.setRemarks("Item remarks");
         item.setImage("00125.jpg");
@@ -164,7 +164,7 @@ public class ItemsServiceTest {
         assertEquals("Die cast", item.getTechnique());
         assertEquals("Oxidized", dto.getCondition());
         assertEquals("15x14x12", dto.getDimensions());
-        assertEquals(23, dto.getWeight());
+        assertEquals(23f, dto.getWeight());
         assertEquals("Category Name", dto.getCategory());
         assertEquals("Item remarks", dto.getRemarks());
         assertEquals("00125.jpg", dto.getImageFile());

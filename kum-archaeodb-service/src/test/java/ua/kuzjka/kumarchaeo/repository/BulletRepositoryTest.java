@@ -12,7 +12,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class BulletRepositoryTest {
     @Autowired
     private BulletRepository repository;
@@ -37,7 +36,10 @@ public class BulletRepositoryTest {
         bullet.setCategory(category);
         bullet.setLocation(location);
         bullet.setCaliber(14);
-        bullet.setDeformed(true);
+        bullet.setApproximate(true);
+        bullet.setStandard(BulletStandard.COSSACK);
+        bullet.setDeformed(Deformation.LIGHT);
+        bullet.setImprints(true);
         repository.save(bullet);
     }
 
@@ -52,7 +54,10 @@ public class BulletRepositoryTest {
         assertEquals(1.0f, bullet.getLocation().getLongitude());
         assertEquals(1.0f, bullet.getLocation().getLatitude());
         assertEquals(14, bullet.getCaliber());
-        assertTrue(bullet.isDeformed());
+        assertTrue(bullet.isApproximate());
+        assertEquals(BulletStandard.COSSACK, bullet.getStandard());
+        assertEquals(Deformation.LIGHT, bullet.getDeformed());
+        assertTrue(bullet.hasImprints());
     }
 
     @Test
@@ -73,7 +78,7 @@ public class BulletRepositoryTest {
         newBullet.setPointNumber(new PointNumber(123));
         newBullet.setName("New Bullet");
         newBullet.setCaliber(17);
-        newBullet.setDeformed(false);
+        newBullet.setDeformed(Deformation.NONE);
         newBullet.setCategory(category);
         newBullet.setLocation(new Location(2.0f, 2.0f));
         repository.save(newBullet);
@@ -83,7 +88,7 @@ public class BulletRepositoryTest {
         assertTrue(bullet.isPresent());
         assertEquals("New Bullet", bullet.get().getName());
         assertEquals(17, bullet.get().getCaliber());
-        assertFalse(bullet.get().isDeformed());
+        assertEquals(Deformation.NONE, bullet.get().getDeformed());
     }
 
     @Test

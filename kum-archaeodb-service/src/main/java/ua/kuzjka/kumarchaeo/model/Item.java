@@ -28,14 +28,21 @@ public class Item {
     private String technique;
     private String condition;
     private String dimensions;
-    private Integer weight;
+    private Float weight;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
     private String remarks;
+    private Integer context;
     private String image;
+
+    @Column(name = "museum_number")
+    private String museumNumber;
+
+    @Column(name = "gps_point")
+    private String gpsPoint;
 
     /**
      * Gets entity ID.
@@ -233,7 +240,7 @@ public class Item {
      * Gets item weight.
      * @return  Item weight in grams
      */
-    public Integer getWeight() {
+    public Float getWeight() {
         return weight;
     }
 
@@ -241,7 +248,7 @@ public class Item {
      * Stes item weight.
      * @param weight    Item weight in grams
      */
-    public void setWeight(Integer weight) {
+    public void setWeight(Float weight) {
         this.weight = weight;
     }
 
@@ -278,6 +285,22 @@ public class Item {
     }
 
     /**
+     * Gets item context number.
+     * @return  Context number or {@code null} if item is not contained to a context
+     */
+    public Integer getContext() {
+        return context;
+    }
+
+    /**
+     * Sets item context number.
+     * @param context   Context number
+     */
+    public void setContext(Integer context) {
+        this.context = context;
+    }
+
+    /**
      * Gets image filename.
      * @return  Name of the image file
      */
@@ -291,5 +314,37 @@ public class Item {
      */
     public void setImage(String image) {
         this.image = image;
+    }
+
+    /**
+     * Gets item museum number.
+     * @return  Museum number
+     */
+    public String getMuseumNumber() {
+        return museumNumber;
+    }
+
+    /**
+     * Sets item museum number.
+     * @param museumNumber  Museum number
+     */
+    public void setMuseumNumber(String museumNumber) {
+        this.museumNumber = museumNumber;
+    }
+
+    /**
+     * Gets GPS point name.
+     * @return  GPS point name
+     */
+    public String getGpsPoint() {
+        return gpsPoint;
+    }
+
+    /**
+     * Sets GPS point name.
+     * @param gpsPoint  GPS point name
+     */
+    public void setGpsPoint(String gpsPoint) {
+        this.gpsPoint = gpsPoint;
     }
 }

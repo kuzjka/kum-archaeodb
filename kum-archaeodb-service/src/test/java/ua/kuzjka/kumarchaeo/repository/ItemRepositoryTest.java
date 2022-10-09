@@ -39,10 +39,13 @@ public class ItemRepositoryTest {
         item.setTechnique("Casting");
         item.setCondition("Oxidized");
         item.setDimensions("25x18x12");
-        item.setWeight(35);
+        item.setWeight(35f);
         item.setCategory(category);
         item.setRemarks("remarks");
+        item.setContext(24);
         item.setImage("001.jpg");
+        item.setMuseumNumber("0005/23/145");
+        item.setGpsPoint("49K");
 
         repository.save(item);
     }
@@ -66,7 +69,10 @@ public class ItemRepositoryTest {
         assertEquals("25x18x12", item.getDimensions());
         assertEquals("Existing Category", item.getCategory().getName());
         assertEquals("remarks", item.getRemarks());
+        assertEquals(24, item.getContext());
         assertEquals("001.jpg", item.getImage());
+        assertEquals("0005/23/145", item.getMuseumNumber());
+        assertEquals("49K", item.getGpsPoint());
     }
 
     @Test

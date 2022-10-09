@@ -16,7 +16,7 @@ public class ItemDto {
     private String technique;
     private String condition;
     private String dimensions;
-    private Integer weight;
+    private Float weight;
     private String remarks;
     private String imageFile;
 
@@ -140,11 +140,11 @@ public class ItemDto {
         this.dimensions = dimensions;
     }
 
-    public Integer getWeight() {
+    public Float getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(Float weight) {
         this.weight = weight;
     }
 
