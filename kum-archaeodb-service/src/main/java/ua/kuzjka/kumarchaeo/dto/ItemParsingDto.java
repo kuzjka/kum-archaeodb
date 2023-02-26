@@ -1,24 +1,27 @@
 package ua.kuzjka.kumarchaeo.dto;
 
+import ua.kuzjka.kumarchaeo.model.Deformation;
 import ua.kuzjka.kumarchaeo.model.Location;
+import ua.kuzjka.kumarchaeo.model.PointNumber;
 
 public class ItemParsingDto {
     private String name;
-    private String number;
+    private PointNumber number;
     private Location location;
     private Integer hectar;
     private String dimensions;
-    private Integer weight;
+    private Float weight;
     private String remarks;
-    private String image;
+    private String gpsPoint;
     private String category;
     private Integer caliber;
-    private boolean deformed;
+    private boolean caliberApproximate;
+    private Deformation deformation;
     private boolean numberExists;
-    private boolean autoDetectedCategory;
-    private boolean autoDetectedCaliber;
-    private boolean autoDetectedDeformed;
-    private boolean autoDetectedHectar;
+    private boolean categoryAutodetected;
+    private boolean caliberAutodetected;
+    private boolean deformationAutodetected;
+    private boolean hectarAutodetected;
     private boolean save;
 
     public String getName() {
@@ -29,11 +32,11 @@ public class ItemParsingDto {
         this.name = name;
     }
 
-    public String getNumber() {
+    public PointNumber getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(PointNumber number) {
         this.number = number;
     }
 
@@ -61,11 +64,11 @@ public class ItemParsingDto {
         this.dimensions = dimensions;
     }
 
-    public Integer getWeight() {
+    public Float getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(Float weight) {
         this.weight = weight;
     }
 
@@ -77,12 +80,12 @@ public class ItemParsingDto {
         this.remarks = remarks;
     }
 
-    public String getImage() {
-        return image;
+    public String getGpsPoint() {
+        return gpsPoint;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setGpsPoint(String gpsPoint) {
+        this.gpsPoint = gpsPoint;
     }
 
     public String getCategory() {
@@ -101,12 +104,20 @@ public class ItemParsingDto {
         this.caliber = caliber;
     }
 
-    public boolean isDeformed() {
-        return deformed;
+    public boolean isCaliberApproximate() {
+        return caliberApproximate;
     }
 
-    public void setDeformed(boolean deformed) {
-        this.deformed = deformed;
+    public void setCaliberApproximate(boolean caliberApproximate) {
+        this.caliberApproximate = caliberApproximate;
+    }
+
+    public Deformation getDeformation() {
+        return deformation;
+    }
+
+    public void setDeformation(Deformation deformation) {
+        this.deformation = deformation;
     }
 
     public boolean isNumberExists() {
@@ -117,36 +128,36 @@ public class ItemParsingDto {
         this.numberExists = numberExists;
     }
 
-    public boolean isAutoDetectedCategory() {
-        return autoDetectedCategory;
+    public boolean isCategoryAutodetected() {
+        return categoryAutodetected;
     }
 
-    public void setAutoDetectedCategory(boolean autoDetectedCategory) {
-        this.autoDetectedCategory = autoDetectedCategory;
+    public void setCategoryAutodetected(boolean categoryAutodetected) {
+        this.categoryAutodetected = categoryAutodetected;
     }
 
-    public boolean isAutoDetectedCaliber() {
-        return autoDetectedCaliber;
+    public boolean isCaliberAutodetected() {
+        return caliberAutodetected;
     }
 
-    public void setAutoDetectedCaliber(boolean autoDetectedCaliber) {
-        this.autoDetectedCaliber = autoDetectedCaliber;
+    public void setCaliberAutodetected(boolean caliberAutodetected) {
+        this.caliberAutodetected = caliberAutodetected;
     }
 
-    public boolean isAutoDetectedDeformed() {
-        return autoDetectedDeformed;
+    public boolean isDeformationAutodetected() {
+        return deformationAutodetected;
     }
 
-    public void setAutoDetectedDeformed(boolean autoDetectedDeformed) {
-        this.autoDetectedDeformed = autoDetectedDeformed;
+    public void setDeformationAutodetected(boolean deformationAutodetected) {
+        this.deformationAutodetected = deformationAutodetected;
     }
 
-    public boolean isAutoDetectedHectar() {
-        return autoDetectedHectar;
+    public boolean isHectarAutodetected() {
+        return hectarAutodetected;
     }
 
-    public void setAutoDetectedHectar(boolean autoDetectedHectar) {
-        this.autoDetectedHectar = autoDetectedHectar;
+    public void setHectarAutodetected(boolean hectarAutodetected) {
+        this.hectarAutodetected = hectarAutodetected;
     }
 
     public boolean isSave() {

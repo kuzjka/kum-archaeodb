@@ -3,9 +3,7 @@ package ua.kuzjka.kumarchaeo.parsing;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ua.kuzjka.kumarchaeo.dto.ItemParsingDto;
-import ua.kuzjka.kumarchaeo.model.Category;
-import ua.kuzjka.kumarchaeo.model.Item;
-import ua.kuzjka.kumarchaeo.model.PointNumber;
+import ua.kuzjka.kumarchaeo.model.*;
 import ua.kuzjka.kumarchaeo.repository.CategoryRepository;
 import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
@@ -48,49 +46,125 @@ public class ItemListParserTest {
         when(itemRepository.findByPointNumber(any())).thenReturn(Optional.empty());
 
         InputStream in = getClass().getResourceAsStream("itemList.csv");
-        List<ItemParsingDto> items = parser.parseCsv(in);
+        List<ItemParsingDto> items = parser.parseCsv(in, true);
 
-        assertEquals(4, items.size());
+        assertEquals(6, items.size());
         ItemParsingDto item;
 
         item = items.get(0);
-        assertEquals("57", item.getNumber());
-        assertEquals("Куля свинцева кругла деформована", item.getName());
-        assertEquals(49.52142f, item.getLocation().getLatitude());
-        assertEquals(31.53917f, item.getLocation().getLongitude());
+        assertEquals(new PointNumber(1), item.getNumber());
+        assertEquals("Куля свинцева з хвостиком", item.getName());
+        assertEquals(33.907521f, item.getLocation().getLatitude(), 0.000001f);
+        assertEquals(56.718841f, item.getLocation().getLongitude(), 0.000001f);
         assertNull(item.getHectar());
-        assertEquals("12х13х11", item.getDimensions());
-        assertEquals(10, item.getWeight());
-        assertTrue(item.getRemarks().contains("Вільний пошук"));
-        assertTrue(item.getRemarks().contains("Галявина північніше 4-х сосен через дорогу"));
-        assertTrue(item.getRemarks().contains("557"));
+        assertFalse(item.isHectarAutodetected());
+        assertEquals("17х17х20", item.getDimensions());
+        assertEquals(26.0f, item.getWeight(), 0.1f);
+        assertThat(item.getRemarks(), containsString("Маршрут 1"));
+        assertEquals("591", item.getGpsPoint());
         assertEquals(BULLETS_NAME, item.getCategory());
-        assertEquals(13, item.getCaliber());
-        assertTrue(item.isDeformed());
+        assertTrue(item.isCategoryAutodetected());
+        assertEquals(17, item.getCaliber());
+        assertFalse(item.isCaliberApproximate());
+        assertFalse(item.isCaliberAutodetected());
+        assertEquals(Deformation.NONE, item.getDeformation());
+        assertFalse(item.isDeformationAutodetected());
         assertFalse(item.isNumberExists());
-        assertTrue(item.isAutoDetectedCategory());
-        assertTrue(item.isAutoDetectedCaliber());
-        assertTrue(item.isAutoDetectedDeformed());
-        assertFalse(item.isAutoDetectedHectar());
+        assertFalse(item.isHectarAutodetected());
+        assertTrue(item.isSave());
+
+        item = items.get(1);
+        assertEquals(new PointNumber(16), item.getNumber());
+        assertEquals("Наконечник стріли залізний 4-гранний", item.getName());
+        assertEquals(47.878316f, item.getLocation().getLatitude(), 0.000001f);
+        assertEquals(145.40555f, item.getLocation().getLongitude(), 0.000001f);
+        assertNull(item.getHectar());
+        assertFalse(item.isHectarAutodetected());
+        assertEquals("Довж. заг. - 56; довж. пера - 35. товщ. - 8", item.getDimensions());
+        assertNull(item.getWeight());
+        assertThat(item.getRemarks(), containsString("Маршрут 2"));
+        assertThat(item.getRemarks(), containsString("рест"));
+        assertEquals("789", item.getGpsPoint());
+        assertNull(item.getCategory());
+        assertFalse(item.isCategoryAutodetected());
+        assertFalse(item.isCaliberAutodetected());
+        assertFalse(item.isDeformationAutodetected());
+        assertFalse(item.isNumberExists());
         assertTrue(item.isSave());
 
         item = items.get(2);
-        assertEquals("59", item.getNumber());
-        assertEquals("Вудила залізні (половина)", item.getName());
-        assertEquals(49.52083f, item.getLocation().getLatitude());
-        assertEquals(31.53963f, item.getLocation().getLongitude());
+        assertEquals(new PointNumber(177), item.getNumber());
+        assertEquals("Куля св кругла з зал хвостика деформ", item.getName());
+        assertEquals(20.442709f, item.getLocation().getLatitude(), 0.000001f);
+        assertEquals(31.904602f, item.getLocation().getLongitude(), 0.000001f);
         assertNull(item.getHectar());
-        assertEquals("Довж. гризла - 103. D кільця - 47", item.getDimensions());
-        assertNull(item.getWeight());
-        assertTrue(item.getRemarks().contains("Вільний пошук"));
-        assertTrue(item.getRemarks().contains("Галявина північніше 4-х сосен через дорогу"));
-        assertTrue(item.getRemarks().contains("559"));
-        assertNull(item.getCategory());
+        assertFalse(item.isHectarAutodetected());
+        assertEquals("18х14х19", item.getDimensions());
+        assertEquals(27f, item.getWeight(), 0.1f);
+        assertThat(item.getRemarks(), containsString("Південний сектор"));
+        assertEquals("623", item.getGpsPoint());
+        assertEquals(BULLETS_NAME, item.getCategory());
+        assertEquals(17, item.getCaliber());
+        assertTrue(item.isCaliberApproximate());
+        assertFalse(item.isCaliberAutodetected());
+        assertEquals(Deformation.LIGHT, item.getDeformation());
+        assertTrue(item.isDeformationAutodetected());
         assertFalse(item.isNumberExists());
-        assertFalse(item.isAutoDetectedCategory());
-        assertFalse(item.isAutoDetectedCaliber());
-        assertFalse(item.isAutoDetectedDeformed());
-        assertFalse(item.isAutoDetectedHectar());
+        assertTrue(item.isSave());
+
+        item = items.get(3);
+        assertEquals(new PointNumber(268), item.getNumber());
+        assertEquals("Куля св з зал хвоста розплющена", item.getName());
+        assertEquals(7.048307f, item.getLocation().getLatitude(), 0.000001f);
+        assertEquals(81.145097f, item.getLocation().getLongitude(), 0.000001f);
+        assertNull(item.getHectar());
+        assertFalse(item.isHectarAutodetected());
+        assertEquals("22х17х6", item.getDimensions());
+        assertEquals(11, item.getWeight(), 0.1f);
+        assertThat(item.getRemarks(), containsString("Трикутний ліс"));
+        assertEquals("705", item.getGpsPoint());
+        assertEquals(BULLETS_NAME, item.getCategory());
+        assertTrue(item.isCategoryAutodetected());
+        assertNull(item.getCaliber());
+        assertFalse(item.isCaliberAutodetected());
+        assertEquals(Deformation.HARD, item.getDeformation());
+        assertTrue(item.isDeformationAutodetected());
+        assertFalse(item.isNumberExists());
+        assertTrue(item.isSave());
+
+        item = items.get(4);
+        assertEquals(new PointNumber(512), item.getNumber());
+        assertEquals("Куля деформ", item.getName());
+        assertEquals(70.293511f, item.getLocation().getLatitude(), 0.000001f);
+        assertEquals(149.31290f, item.getLocation().getLongitude(), 0.000001f);
+        assertEquals(6, item.getHectar());
+        assertTrue(item.isHectarAutodetected());
+        assertEquals("17х15х14", item.getDimensions());
+        assertEquals(18.2f, item.getWeight(), 0.1f);
+        assertThat(item.getRemarks(), containsString("Га 6. 01.07.22"));
+        assertEquals("786", item.getGpsPoint());
+        assertEquals(BULLETS_NAME, item.getCategory());
+        assertEquals(16, item.getCaliber());
+        assertFalse(item.isCaliberApproximate());
+        assertFalse(item.isCaliberAutodetected());
+        assertEquals(Deformation.LIGHT, item.getDeformation());
+        assertTrue(item.isDeformationAutodetected());
+        assertFalse(item.isNumberExists());
+        assertTrue(item.isSave());
+
+        item = items.get(5);
+        assertEquals(new PointNumber(615, 1), item.getNumber());
+        assertEquals("Монета-солід", item.getName());
+        assertEquals(17.071103f, item.getLocation().getLatitude(), 0.000001f);
+        assertEquals(17.971902f, item.getLocation().getLongitude(), 0.000001f);
+        assertEquals(2, item.getHectar());
+        assertTrue(item.isHectarAutodetected());
+        assertEquals("", item.getDimensions());
+        assertNull(item.getWeight());
+        assertThat(item.getRemarks(), containsString("Га 2 - исслед 45х82 м юг-вос части"));
+        assertThat(item.getRemarks(), containsString("Експерементальний гектар"));
+        assertEquals("21п№12", item.getGpsPoint());
+        assertFalse(item.isCategoryAutodetected());
         assertTrue(item.isSave());
     }
 
@@ -99,9 +173,9 @@ public class ItemListParserTest {
         when(itemRepository.findByPointNumber(any())).thenReturn(Optional.of(new Item()));
 
         InputStream in = getClass().getResourceAsStream("itemList.csv");
-        List<ItemParsingDto> items = parser.parseCsv(in);
+        List<ItemParsingDto> items = parser.parseCsv(in, true);
 
-        assertEquals(4, items.size());
+        assertEquals(6, items.size());
 
         assertTrue(items.stream().noneMatch(ItemParsingDto::isSave));
         assertTrue(items.stream().allMatch(ItemParsingDto::isNumberExists));
@@ -137,15 +211,16 @@ public class ItemListParserTest {
 
     @Test
     public void testAutodetectDeformed() {
-        assertTrue(parser.autodetectDeformed("Куля деформована"));
-        assertTrue(parser.autodetectDeformed("Куля свинцева розплющена"));
-        assertTrue(parser.autodetectDeformed("Куля свинцева з хвостиком. деформ."));
-        assertFalse(parser.autodetectDeformed("Куля свинцева кругла з зал. хвостика"));
-        assertTrue(parser.autodetectDeformed("Куля св кругла з площ деформ"));
-        assertFalse(parser.autodetectDeformed("Куля свинцева кругла"));
-        assertTrue(parser.autodetectDeformed("Куля св кругла з хвостом розрізана"));
-        assertFalse(parser.autodetectDeformed("Куля св напівсферична"));
-        assertTrue(parser.autodetectDeformed("Куля св кругла деформована?"));
+        assertEquals(Deformation.LIGHT, parser.autodetectDeformed("Куля деформована"));
+        assertEquals(Deformation.HARD, parser.autodetectDeformed("Куля свинцева розплющена"));
+        assertEquals(Deformation.LIGHT, parser.autodetectDeformed("Куля свинцева з хвостиком. деформ."));
+        assertEquals(Deformation.NONE, parser.autodetectDeformed("Куля свинцева кругла з зал. хвостика"));
+        assertEquals(Deformation.LIGHT, parser.autodetectDeformed("Куля св кругла з площ деформ"));
+        assertEquals(Deformation.NONE, parser.autodetectDeformed("Куля свинцева кругла"));
+        assertEquals(Deformation.HARD, parser.autodetectDeformed("Куля св кругла з хвостом розрізана"));
+        assertEquals(Deformation.NONE, parser.autodetectDeformed("Куля св напівсферична"));
+        assertEquals(Deformation.LIGHT, parser.autodetectDeformed("Куля св кругла деформована?"));
+        assertEquals(Deformation.HARD, parser.autodetectDeformed("Куля св кругла розплющена"));
     }
 
     @Test

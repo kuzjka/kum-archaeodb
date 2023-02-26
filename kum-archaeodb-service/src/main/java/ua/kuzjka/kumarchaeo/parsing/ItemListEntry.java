@@ -7,14 +7,15 @@ public class ItemListEntry {
     private String number;
     private String name;
     private String dimensions;
-    private Integer weight;
-    private String photo;
-    private float latitude;
-    private float longitude;
+    private Float weight;
+    private String caliber;
+    private String remark1;
+    private Float latitude;
+    private Float longitude;
     private String gpsPoint;
     private String route;
-    private String remark1;
     private String remark2;
+    private String remark3;
 
     public String getNumber() {
         return number;
@@ -40,35 +41,27 @@ public class ItemListEntry {
         this.dimensions = dimensions;
     }
 
-    public Integer getWeight() {
+    public Float getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(Float weight) {
         this.weight = weight;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public float getLatitude() {
+    public Float getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(Float latitude) {
         this.latitude = latitude;
     }
 
-    public float getLongitude() {
+    public Float getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(Float longitude) {
         this.longitude = longitude;
     }
 
@@ -102,5 +95,21 @@ public class ItemListEntry {
 
     public void setRemark2(String remark2) {
         this.remark2 = remark2;
+    }
+
+    public String getCaliber() {
+        return caliber;
+    }
+
+    public void setCaliber(String caliber) {
+        this.caliber = caliber;
+    }
+
+    public String getRemark3() {
+        return remark3;
+    }
+
+    public void setRemark3(String remark3) {
+        this.remark3 = remark3;
     }
 }
