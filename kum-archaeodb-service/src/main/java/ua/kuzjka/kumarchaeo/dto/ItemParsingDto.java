@@ -8,7 +8,7 @@ public class ItemParsingDto {
     private String name;
     private PointNumber number;
     private Location location;
-    private Integer hectar;
+    private Integer hectare;
     private String dimensions;
     private Float weight;
     private String remarks;
@@ -21,7 +21,7 @@ public class ItemParsingDto {
     private boolean categoryAutodetected;
     private boolean caliberAutodetected;
     private boolean deformationAutodetected;
-    private boolean hectarAutodetected;
+    private boolean hectareAutodetected;
     private boolean save;
 
     public String getName() {
@@ -48,12 +48,12 @@ public class ItemParsingDto {
         this.location = location;
     }
 
-    public Integer getHectar() {
-        return hectar;
+    public Integer getHectare() {
+        return hectare;
     }
 
-    public void setHectar(Integer hectar) {
-        this.hectar = hectar;
+    public void setHectare(Integer hectare) {
+        this.hectare = hectare;
     }
 
     public String getDimensions() {
@@ -152,12 +152,12 @@ public class ItemParsingDto {
         this.deformationAutodetected = deformationAutodetected;
     }
 
-    public boolean isHectarAutodetected() {
-        return hectarAutodetected;
+    public boolean isHectareAutodetected() {
+        return hectareAutodetected;
     }
 
-    public void setHectarAutodetected(boolean hectarAutodetected) {
-        this.hectarAutodetected = hectarAutodetected;
+    public void setHectareAutodetected(boolean hectareAutodetected) {
+        this.hectareAutodetected = hectareAutodetected;
     }
 
     public boolean isSave() {

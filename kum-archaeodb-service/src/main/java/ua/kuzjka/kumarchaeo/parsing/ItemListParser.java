@@ -121,8 +121,8 @@ public class ItemListParser {
 
         int hectar = autodetectHectar(entry.getRoute());
         if (hectar != -1) {
-            item.setHectar(hectar);
-            item.setHectarAutodetected(true);
+            item.setHectare(hectar);
+            item.setHectareAutodetected(true);
         }
 
         item.setGpsPoint(entry.getGpsPoint());

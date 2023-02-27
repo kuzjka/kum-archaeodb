@@ -56,8 +56,8 @@ public class ItemListParserTest {
         assertEquals("Куля свинцева з хвостиком", item.getName());
         assertEquals(33.907521f, item.getLocation().getLatitude(), 0.000001f);
         assertEquals(56.718841f, item.getLocation().getLongitude(), 0.000001f);
-        assertNull(item.getHectar());
-        assertFalse(item.isHectarAutodetected());
+        assertNull(item.getHectare());
+        assertFalse(item.isHectareAutodetected());
         assertEquals("17х17х20", item.getDimensions());
         assertEquals(26.0f, item.getWeight(), 0.1f);
         assertThat(item.getRemarks(), containsString("Маршрут 1"));
@@ -70,7 +70,7 @@ public class ItemListParserTest {
         assertEquals(Deformation.NONE, item.getDeformation());
         assertFalse(item.isDeformationAutodetected());
         assertFalse(item.isNumberExists());
-        assertFalse(item.isHectarAutodetected());
+        assertFalse(item.isHectareAutodetected());
         assertTrue(item.isSave());
 
         item = items.get(1);
@@ -78,8 +78,8 @@ public class ItemListParserTest {
         assertEquals("Наконечник стріли залізний 4-гранний", item.getName());
         assertEquals(47.878316f, item.getLocation().getLatitude(), 0.000001f);
         assertEquals(145.40555f, item.getLocation().getLongitude(), 0.000001f);
-        assertNull(item.getHectar());
-        assertFalse(item.isHectarAutodetected());
+        assertNull(item.getHectare());
+        assertFalse(item.isHectareAutodetected());
         assertEquals("Довж. заг. - 56; довж. пера - 35. товщ. - 8", item.getDimensions());
         assertNull(item.getWeight());
         assertThat(item.getRemarks(), containsString("Маршрут 2"));
@@ -97,8 +97,8 @@ public class ItemListParserTest {
         assertEquals("Куля св кругла з зал хвостика деформ", item.getName());
         assertEquals(20.442709f, item.getLocation().getLatitude(), 0.000001f);
         assertEquals(31.904602f, item.getLocation().getLongitude(), 0.000001f);
-        assertNull(item.getHectar());
-        assertFalse(item.isHectarAutodetected());
+        assertNull(item.getHectare());
+        assertFalse(item.isHectareAutodetected());
         assertEquals("18х14х19", item.getDimensions());
         assertEquals(27f, item.getWeight(), 0.1f);
         assertThat(item.getRemarks(), containsString("Південний сектор"));
@@ -117,8 +117,8 @@ public class ItemListParserTest {
         assertEquals("Куля св з зал хвоста розплющена", item.getName());
         assertEquals(7.048307f, item.getLocation().getLatitude(), 0.000001f);
         assertEquals(81.145097f, item.getLocation().getLongitude(), 0.000001f);
-        assertNull(item.getHectar());
-        assertFalse(item.isHectarAutodetected());
+        assertNull(item.getHectare());
+        assertFalse(item.isHectareAutodetected());
         assertEquals("22х17х6", item.getDimensions());
         assertEquals(11, item.getWeight(), 0.1f);
         assertThat(item.getRemarks(), containsString("Трикутний ліс"));
@@ -137,8 +137,8 @@ public class ItemListParserTest {
         assertEquals("Куля деформ", item.getName());
         assertEquals(70.293511f, item.getLocation().getLatitude(), 0.000001f);
         assertEquals(149.31290f, item.getLocation().getLongitude(), 0.000001f);
-        assertEquals(6, item.getHectar());
-        assertTrue(item.isHectarAutodetected());
+        assertEquals(6, item.getHectare());
+        assertTrue(item.isHectareAutodetected());
         assertEquals("17х15х14", item.getDimensions());
         assertEquals(18.2f, item.getWeight(), 0.1f);
         assertThat(item.getRemarks(), containsString("Га 6. 01.07.22"));
@@ -157,8 +157,8 @@ public class ItemListParserTest {
         assertEquals("Монета-солід", item.getName());
         assertEquals(17.071103f, item.getLocation().getLatitude(), 0.000001f);
         assertEquals(17.971902f, item.getLocation().getLongitude(), 0.000001f);
-        assertEquals(2, item.getHectar());
-        assertTrue(item.isHectarAutodetected());
+        assertEquals(2, item.getHectare());
+        assertTrue(item.isHectareAutodetected());
         assertEquals("", item.getDimensions());
         assertNull(item.getWeight());
         assertThat(item.getRemarks(), containsString("Га 2 - исслед 45х82 м юг-вос части"));
