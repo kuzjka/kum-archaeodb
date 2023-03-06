@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common';
 import { ItemsRoutingModule } from './items-routing.module';
 import { ItemListComponent } from './item-list/item-list.component';
 
+// Material
+import { MatTableModule } from "@angular/material/table";
+
 
 @NgModule({
   declarations: [
@@ -11,7 +14,10 @@ import { ItemListComponent } from './item-list/item-list.component';
   ],
   imports: [
     CommonModule,
-    ItemsRoutingModule
+    ItemsRoutingModule,
+
+    // Material
+    MatTableModule
   ]
 })
 export class ItemsModule { }

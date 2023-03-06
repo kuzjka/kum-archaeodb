@@ -90,6 +90,8 @@ This variant is used for copy&paste from Excel
 
 ##### Query parameters
 
+|Parameter|Type|Description|
+|---|---|---|
 |**delimiter**|string|Delimiter char|
 |**hasHeaders**|boolean|Indicates if the content has a header row|
 |**content**|string|CSV content of the file|
@@ -100,6 +102,8 @@ This variant is used to upload CSV files
 
 ##### Query parameters
 
+|Parameter|Type|Description|
+|---|---|---|
 |**delimiter**|string|Delimiter char|
 |**hasHeaders**|boolean|Indicates if the content has a header row|
 |**content**|file|CSV file|
