@@ -1,0 +1,27 @@
+.item-details {
+  display: flex;
+}
+
+.item-details-column {
+  flex: 50%
+}
+
+tr.expanded-detail-row {
+  height: 0;
+}
+
+tr.item-row:not(.expanded-detail-row):hover {
+  background: whitesmoke;
+}
+
+tr.item-row:not(.expanded-detail-row):active {
+  background: #efefef;
+}
+
+tr.item-row td {
+  border-bottom-width: 0;
+}
+
+tr.item-row {
+  cursor: pointer;
+}
