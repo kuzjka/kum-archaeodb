@@ -1,0 +1,100 @@
+<mat-stepper linear="true" (selectionChange)="onStepperChange($event)">
+
+  <mat-step>
+    <ng-template matStepLabel>Додавання даних</ng-template>
+
+    <div class="stepper-content">
+      <div>
+        <button type="button" mat-raised-button (click)="fileInput.click()">Виберіть файл</button>
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file">
+      </div>
+
+      <mat-form-field id="csv_textarea">
+        <textarea matInput rows="15" placeholder="...або скопіюйте контент сюди" [formControl]="csvField"></textarea>
+      </mat-form-field>
+
+      <div>
+        <label>Розділювач:</label>
+        <mat-radio-group [formControl]="delimiterField">
+          <mat-radio-button value="TAB">Табуляція</mat-radio-button>
+          <mat-radio-button value="COMMA">Кома</mat-radio-button>
+          <mat-radio-button value="SEMICOLON">Крапка з комою</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <div class="actions-bar">
+        <button mat-raised-button matStepperNext color="primary">Далі</button>
+      </div>
+    </div>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Перевірка</ng-template>
+
+    <div class="stepper-content">
+      <div class="spinner-container" *ngIf="loading">
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </div>
+
+      <table *ngIf="!loading" mat-table [dataSource]="parsedItems" class="parsed-items-table">
+        <ng-container matColumnDef="pointNumber">
+          <th mat-header-cell *matHeaderCellDef>Номер</th>
+          <td mat-cell *matCellDef="let item">{{ item.pointNumber }}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Назва</th>
+          <td mat-cell *matCellDef="let item">{{ item.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef>Категорія</th>
+          <td mat-cell *matCellDef="let item">{{ item.category }}</td>
+        </ng-container>
+        <ng-container matColumnDef="latitude">
+          <th mat-header-cell *matHeaderCellDef>Широта</th>
+          <td mat-cell *matCellDef="let item">{{ item.location.latitude }}</td>
+        </ng-container>
+        <ng-container matColumnDef="longitude">
+          <th mat-header-cell *matHeaderCellDef>Довгота</th>
+          <td mat-cell *matCellDef="let item">{{ item.location.longitude }}</td>
+        </ng-container>
+        <ng-container matColumnDef="hectare">
+          <th mat-header-cell *matHeaderCellDef>Гектар</th>
+          <td mat-cell *matCellDef="let item">{{ item.hectare }}</td>
+        </ng-container>
+        <ng-container matColumnDef="dimensions">
+          <th mat-header-cell *matHeaderCellDef>Розміри</th>
+          <td mat-cell *matCellDef="let item">{{ item.dimensions }}</td>
+        </ng-container>
+        <ng-container matColumnDef="weight">
+          <th mat-header-cell *matHeaderCellDef>Вага</th>
+          <td mat-cell *matCellDef="let item">{{ item.weight }} г</td>
+        </ng-container>
+        <ng-container matColumnDef="remarks">
+          <th mat-header-cell *matHeaderCellDef>Примітки</th>
+          <td mat-cell *matCellDef="let item">{{ item.remarks }}</td>
+        </ng-container>
+        <ng-container matColumnDef="gpsPoint">
+          <th mat-header-cell *matHeaderCellDef>Точка GPS</th>
+          <td mat-cell *matCellDef="let item">{{ item.gpsPoint }}</td>
+        </ng-container>
+        <ng-container matColumnDef="caliber">
+          <th mat-header-cell *matHeaderCellDef>Калібр</th>
+          <td mat-cell *matCellDef="let item">{{ item.caliberApproximate ? '~' : '' }}{{ item.caliber }}</td>
+        </ng-container>
+        <ng-container matColumnDef="deformation">
+          <th mat-header-cell *matHeaderCellDef>Деформація</th>
+          <td mat-cell *matCellDef="let item">{{ item.deformation }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="parsedItemColumns; sticky: true;"></tr>
+        <tr mat-row *matRowDef="let row; columns: parsedItemColumns"></tr>
+
+      </table>
+      <div class="buttons-container">
+        <button mat-raised-button matStepperPrevious>Назад</button>
+        <button mat-raised-button color="primary">Готово</button>
+      </div>
+    </div>
+  </mat-step>
+
+</mat-stepper>

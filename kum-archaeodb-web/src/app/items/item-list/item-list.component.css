@@ -1,3 +1,11 @@
+div.actions-bar {
+  padding: 8px;
+}
+
+div.actions-bar button:not(:first-child) {
+  margin-left: 8px;
+}
+
 .item-details {
   display: flex;
 }

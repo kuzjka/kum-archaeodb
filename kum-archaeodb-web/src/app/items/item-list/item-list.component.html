@@ -1,4 +1,9 @@
-<p>Всього знахідок: <b>{{ totalItems }}</b></p>
+<div class="actions-bar">
+  <a href="items/import" mat-raised-button>Імпортувати</a>
+  <button mat-raised-button>Експортувати</button>
+</div>
+
+<div>Всього знахідок: <b>{{ totalItems }}</b></div>
 
 <table mat-table [dataSource]="items" multiTemplateDataRows>
   <ng-container matColumnDef="pointNumber">

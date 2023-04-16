@@ -1,0 +1,24 @@
+.stepper-content {
+  margin: 16px;
+}
+
+#csv_textarea {
+  margin: 16px 0;
+  width: 100%;
+}
+
+.parsed-items-table {
+  margin: 16px 0;
+}
+
+.buttons-container button:not(:first-child) {
+  margin-left: 8px;
+}
+
+.spinner-container {
+  width: 100%;
+}
+
+.spinner-container > mat-progress-spinner {
+  margin: auto;
+}

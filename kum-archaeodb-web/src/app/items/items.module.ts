@@ -6,17 +6,35 @@ import { ItemListComponent } from './item-list/item-list.component';
 
 // Material
 import { MatTableModule } from "@angular/material/table";
+import { MatButtonModule } from "@angular/material/button";
+import { ItemsImportComponent } from './items-import/items-import.component';
+import { MatStepperModule } from "@angular/material/stepper";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 
 @NgModule({
   declarations: [
-    ItemListComponent
+    ItemListComponent,
+    ItemsImportComponent
   ],
   imports: [
     CommonModule,
     ItemsRoutingModule,
+    ReactiveFormsModule,
 
     // Material
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSnackBarModule,
+    MatStepperModule,
     MatTableModule
   ]
 })

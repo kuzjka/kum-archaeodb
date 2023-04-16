@@ -42,7 +42,7 @@ export interface Bullet extends Item {
   imprints?: boolean;
 }
 
-export interface ItemParsing {
+export interface ParsedItem {
   name: string;
   pointNumber: string;
   location: Location;
