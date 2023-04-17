@@ -46,7 +46,7 @@ export interface ParsedItem {
   name: string;
   pointNumber: string;
   location: Location;
-  hectare: number;
+  hectare?: number;
   dimensions: string;
   weight: number;
   remarks: string;

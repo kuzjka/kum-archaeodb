@@ -7,8 +7,17 @@
   width: 100%;
 }
 
+.button-ml {
+  margin-left: 8px;
+}
+
+.category-select {
+  /*width: 50em;*/
+}
+
 .parsed-items-table {
   margin: 16px 0;
+  overflow-x: scroll;
 }
 
 .buttons-container button:not(:first-child) {

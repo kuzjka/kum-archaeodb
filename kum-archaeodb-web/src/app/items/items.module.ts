@@ -15,6 +15,10 @@ import { MatInputModule } from "@angular/material/input";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatIconModule } from "@angular/material/icon";
+import { MatSelectModule } from "@angular/material/select";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatListModule } from "@angular/material/list";
 
 
 @NgModule({
@@ -29,10 +33,14 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
     // Material
     MatButtonModule,
+    MatCheckboxModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
+    MatListModule,
     MatProgressSpinnerModule,
     MatRadioModule,
+    MatSelectModule,
     MatSnackBarModule,
     MatStepperModule,
     MatTableModule
