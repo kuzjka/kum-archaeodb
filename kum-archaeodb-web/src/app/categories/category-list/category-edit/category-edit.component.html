@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+
+<div mat-dialog-content [formGroup]="categoryForm" (ngSubmit)="submit()" class="category-form">
+  <mat-form-field>
+    <mat-label>Назва</mat-label>
+    <input matInput formControlName="name">
+  </mat-form-field>
+  <mat-form-field [style.width.px]="400">
+    <mat-label>Фільтри автовизначення</mat-label>
+    <input matInput formControlName="filters">
+    <mat-hint>Введіть ключові слова через кому</mat-hint>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onClose()">Відміна</button>
+  <button mat-button type="submit" (click)="submit()" [disabled]="!categoryForm.valid">Зберегти</button>
+</div>
