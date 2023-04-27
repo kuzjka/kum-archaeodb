@@ -49,6 +49,7 @@ Returns a [Page](#page-object) of items.
 
 |Field|Type|Description|
 |---|---|---|
+|**id**|number|Item ID|
 |**name**|string|Item name|
 |**year**|number|Year of the aquisition|
 |**pointNumber**|string|Point number (inventory list number)|
@@ -84,9 +85,9 @@ Uploads a CSV file with item list for parsing and returns preliminary parsing re
 
 #### Request
 
-**Content-Type: application/x-www-form-urlencoded**
+**Content-Type: application/json**
 
-This variant is used for copy&paste from Excel
+Requests item parsing from a CSV format.
 
 ##### Query parameters
 
@@ -95,18 +96,6 @@ This variant is used for copy&paste from Excel
 |**delimiter**|string|Delimiter char|
 |**hasHeaders**|boolean|Indicates if the content has a header row|
 |**content**|string|CSV content of the file|
-
-**Content-Type: multipart/form-data**
-
-This variant is used to upload CSV files
-
-##### Query parameters
-
-|Parameter|Type|Description|
-|---|---|---|
-|**delimiter**|string|Delimiter char|
-|**hasHeaders**|boolean|Indicates if the content has a header row|
-|**content**|file|CSV file|
 
 #### Response
 
@@ -158,4 +147,79 @@ HTTP 500 in case of server error
 
 |Field|Type|Description|
 |---|---|---|
-|message|string|Error message|
+|**message**|string|Error message|
+
+## Categories
+
+### GET /api/categoryNames
+
+Gets category names.
+
+#### Response
+
+**Content-Type: application/json**
+
+Response is _Array<String>_ - list of category names.
+
+### GET /api/categories
+
+Gets all categories.
+
+#### Response
+
+**Content-Type: application/json**
+
+Returns an array of [Category](#category) objects.
+
+##### Category
+
+|Field|Type|Description|
+|---|---|---|
+|**id**|number|Category ID|
+|**name**|string|Category name|
+|**filters**|Array<string>|Keywords for category autodetection
+
+### POST /api/categories
+
+Adds a new category.
+
+#### Request
+
+**Content-Type: application/json**
+
+Content is a **Category** object (see above) with **id** field absent, undefined or `null`.
+
+#### Response
+
+**Content-Type: application/json**
+
+HTTP 200
+
+|Field|Type|Description|
+|---|---|---|
+|**id**|number|Category ID|
+
+#### Error Response
+
+HTTP 400 if request body does not meet object schema specifications
+HTTP 500 in case of server error
+
+### PUT /api/categories
+
+Updates category name and/or autodetection filters.
+
+#### Request
+
+**Content-Type: application/json**
+
+Request body is a **Category** object (see above). **id** field is mandatory.
+
+#### Response
+
+HTTP 200 (empty body)
+
+#### Error Response
+
+HTTP 400 if request body does not meet object schema specifications
+HTTP 404 if the category for this ID is not found
+HTTP 500 in case of server error
