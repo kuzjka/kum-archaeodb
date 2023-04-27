@@ -159,7 +159,7 @@ Gets category names.
 
 **Content-Type: application/json**
 
-Response is _Array<String>_ - list of category names.
+Response is an array of strings - list of category names.
 
 ### GET /api/categories
 
@@ -177,7 +177,7 @@ Returns an array of [Category](#category) objects.
 |---|---|---|
 |**id**|number|Category ID|
 |**name**|string|Category name|
-|**filters**|Array<string>|Keywords for category autodetection
+|**filters**|Array\<string\>|Keywords for category autodetection
 
 ### POST /api/categories
 
