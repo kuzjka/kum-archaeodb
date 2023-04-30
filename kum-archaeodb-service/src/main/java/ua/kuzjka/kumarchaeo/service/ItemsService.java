@@ -1,6 +1,7 @@
 package ua.kuzjka.kumarchaeo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ua.kuzjka.kumarchaeo.dto.CategoryDto;
 import ua.kuzjka.kumarchaeo.dto.ItemDto;
 import ua.kuzjka.kumarchaeo.model.Category;
@@ -8,9 +9,11 @@ import ua.kuzjka.kumarchaeo.model.Item;
 import ua.kuzjka.kumarchaeo.repository.CategoryRepository;
 import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ItemsService {
     private ItemRepository itemRepository;
     private CategoryRepository categoryRepository;
@@ -22,7 +25,8 @@ public class ItemsService {
 
     /**
      * Gets all categories.
-     * @return  List of categories
+     *
+     * @return List of categories
      */
     public List<CategoryDto> getCategories() {
         return categoryRepository.findAll().
@@ -30,9 +34,20 @@ public class ItemsService {
     }
 
     /**
+     * Gets all category names
+     * @return List of category names
+     */
+    public List<String> getCategoryNames() {
+        List<String> names = new ArrayList<>();
+        categoryRepository.findAll().forEach(x -> names.add(x.getName()));
+        return names;
+    }
+
+    /**
      * Gets category by ID.
-     * @param id    Category ID
-     * @return      Category for given ID
+     *
+     * @param id Category ID
+     * @return Category for given ID
      * @throws java.util.NoSuchElementException if there is no category for the ID
      */
     public CategoryDto getCategory(int id) {
@@ -42,10 +57,12 @@ public class ItemsService {
 
     /**
      * Saves existing category or adds new.
-     * @param categoryDto   Category to add/update
+     *
+     * @param categoryDto Category to add/update
+     * @return  id of category
      * @throws java.util.NoSuchElementException when trying to update non-existing category
      */
-    public void saveCategory(CategoryDto categoryDto) {
+    public long saveCategory(CategoryDto categoryDto) {
         Category category;
         if (categoryDto.getId() == null) {
             category = new Category();
@@ -56,12 +73,13 @@ public class ItemsService {
         category.setName(categoryDto.getName());
         category.setFilters(categoryDto.getFilters());
 
-        categoryRepository.save(category);
+        return categoryRepository.save(category).getId();
     }
 
     /**
      * Deletes a category.
-     * @param id    Category id
+     *
+     * @param id Category id
      * @throws java.util.NoSuchElementException if trying to delete non-existing category
      */
     public void deleteCategory(int id) {
@@ -71,8 +89,9 @@ public class ItemsService {
 
     /**
      * Gets info on a single item.
-     * @param id    Item ID
-     * @return      Item information
+     *
+     * @param id Item ID
+     * @return Item information
      * @throws java.util.NoSuchElementException if no item exist for this ID
      */
     public ItemDto getItem(int id) {
