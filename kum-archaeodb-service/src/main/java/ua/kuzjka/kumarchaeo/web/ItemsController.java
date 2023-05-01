@@ -10,7 +10,10 @@ import ua.kuzjka.kumarchaeo.service.ItemsService;
 
 import java.util.List;
 
-@RestController("/")
+
+
+@RestController
+@RequestMapping("/api")
 public class ItemsController {
 
     private ItemsService itemsService;
