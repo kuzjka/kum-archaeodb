@@ -27,19 +27,30 @@ public class ItemsControllerTest {
     private ItemsService itemsService;
 
     @Test
-    void getCategoriesTest() throws Exception{
-        String content = "[{\"id\":1,\"name\":\"Кулі\", \"filters\":['кулі']}]";
+    void getCategoriesTest() throws Exception {
+        String content = "[{\"id\":1,\"name\":\"Кулі\", \"filters\":[\"кулі\"]}]";
         List<String> filters = new ArrayList<>();
         List<CategoryDto> categories = new ArrayList<>();
         filters.add("кулі");
         CategoryDto dto = new CategoryDto(1, "Кулі", filters);
         categories.add(dto);
 
-            given(this.itemsService.getCategories()).willReturn(categories);
+        given(this.itemsService.getCategories()).willReturn(categories);
         this.mvc.perform(get("/api/categories"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(content));
-        ;
+    }
 
+    @Test
+    void getCategoryNamesTest() throws Exception {
+        String content = "[\"Вогнепальна зброя\", \"Кулі\", \"Спорядження вершника\"]";
+        List<String> names = new ArrayList<>();
+        names.add("Вогнепальна зброя");
+        names.add("Кулі");
+        names.add("Спорядження вершника");
+        given(this.itemsService.getCategoryNames()).willReturn(names);
+        this.mvc.perform(get("/api/categoryNames"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(content));
     }
 }
