@@ -62,7 +62,7 @@ public class ItemsService {
      * @return  id of category
      * @throws java.util.NoSuchElementException when trying to update non-existing category
      */
-    public long saveCategory(CategoryDto categoryDto) {
+    public int saveCategory(CategoryDto categoryDto) {
         Category category;
         if (categoryDto.getId() == null) {
             category = new Category();
