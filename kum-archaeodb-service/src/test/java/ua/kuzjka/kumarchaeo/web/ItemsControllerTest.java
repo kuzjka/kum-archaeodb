@@ -1,29 +1,21 @@
 package ua.kuzjka.kumarchaeo.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-
 import ua.kuzjka.kumarchaeo.dto.CategoryDto;
 import ua.kuzjka.kumarchaeo.service.ItemsService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.hamcrest.Matchers.*;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -94,4 +86,44 @@ public class ItemsControllerTest {
 
     }
 
+    @Test
+    void updateCategoryTest() throws Exception {
+        String json = "{\"id\":1, \"name\":\"Обладунки\", \"filters\":[\"Обладунок\"]}";
+        List<String> filters = new ArrayList<>();
+        filters.add("Обладунок");
+        CategoryDto dto = new CategoryDto(1, "Обладунки", filters);
+        given(this.itemsService.saveCategory(dto)).willReturn(1);
+        this.mvc.perform(put("/api/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void updateNotFoundCategoryTest() throws Exception {
+        String json = "{\"id\":4, \"name\":\"Обладунки\", \"filters\":[\"Обладунок\"]}";
+        List<String> filters = new ArrayList<>();
+        filters.add("Обладунок");
+        CategoryDto dto = new CategoryDto(4, "Обладунки", filters);
+        given(this.itemsService.saveCategory(dto)).willReturn(-1);
+        this.mvc.perform(put("/api/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deleteCategoryTest() throws Exception {
+        given(this.itemsService.deleteCategory(1)).willReturn(1);
+        this.mvc.perform(delete("/api/categories/1"))
+                .andExpect(status().isOk());
+    }
+    @Test
+    void deleteNotFoundCategoryTest() throws Exception {
+        given(this.itemsService.deleteCategory(4)).willReturn(-1);
+        this.mvc.perform(delete("/api/categories/4"))
+                .andExpect(status().is(404));
+    }
 }

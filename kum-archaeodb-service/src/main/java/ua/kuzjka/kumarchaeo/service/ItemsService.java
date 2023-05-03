@@ -11,6 +11,7 @@ import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +36,7 @@ public class ItemsService {
 
     /**
      * Gets all category names
+     *
      * @return List of category names
      */
     public List<String> getCategoryNames() {
@@ -59,7 +61,7 @@ public class ItemsService {
      * Saves existing category or adds new.
      *
      * @param categoryDto Category to add/update
-     * @return  id of category
+     * @return id of category
      * @throws java.util.NoSuchElementException when trying to update non-existing category
      */
     public int saveCategory(CategoryDto categoryDto) {
@@ -68,13 +70,15 @@ public class ItemsService {
             category = new Category();
         } else {
             category = categoryRepository.findById(categoryDto.getId()).get();
+            if(category == null){
+                return -1;
+            }
         }
-
         category.setName(categoryDto.getName());
         category.setFilters(categoryDto.getFilters());
-
         return categoryRepository.save(category).getId();
     }
+
 
     /**
      * Deletes a category.
@@ -82,9 +86,13 @@ public class ItemsService {
      * @param id Category id
      * @throws java.util.NoSuchElementException if trying to delete non-existing category
      */
-    public void deleteCategory(int id) {
+    public int deleteCategory(int id) {
         Category category = categoryRepository.findById(id).get();
+        if (category == null) {
+            return -1;
+        }
         categoryRepository.delete(category);
+        return id;
     }
 
     /**
