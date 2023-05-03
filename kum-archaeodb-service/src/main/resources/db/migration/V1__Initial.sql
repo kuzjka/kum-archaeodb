@@ -1,4 +1,4 @@
-create sequence hibernate_sequence;
+create sequence hibernate_sequence start with 100;
 
 create table items(
   id int primary key,
@@ -36,3 +36,9 @@ create table items(
 );
 create table categories(id int primary key, name varchar(255) unique);
 create table category_filters(category_id int references categories, filter varchar (511));
+insert into categories(id, name) values (1, 'Кулі');
+insert into categories(id, name) values (2, 'Спорядження вершника');
+insert into categories(id, name) values (3, 'Вогнепальна зброя');
+insert into category_filters  (category_id, filter) values (1, 'Куля');
+insert into category_filters  (category_id, filter) values (2, 'Вухналь, Підкова');
+insert into category_filters  (category_id, filter) values (3, 'Мушкет');

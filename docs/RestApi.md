@@ -195,9 +195,7 @@ Content is a **Category** object (see above) with **id** field absent, undefined
 
 HTTP 200
 
-|Field|Type|Description|
-|---|---|---|
-|**id**|number|Category ID|
+Response body is a single number equal to new category ID
 
 #### Error Response
 
@@ -221,5 +219,18 @@ HTTP 200 (empty body)
 #### Error Response
 
 HTTP 400 if request body does not meet object schema specifications
+HTTP 404 if the category for this ID is not found
+HTTP 500 in case of server error
+
+### DELETE /api/categories/{id}
+
+Deletes category with particular id
+
+#### Response
+
+HTTP 200 (empty body)
+
+#### Error Response
+
 HTTP 404 if the category for this ID is not found
 HTTP 500 in case of server error
