@@ -68,12 +68,13 @@ public class ItemsService {
         Category category;
         if (categoryDto.getId() == null) {
             category = new Category();
-        } else {
-            category = categoryRepository.findById(categoryDto.getId()).get();
-            if(category == null){
-                return -1;
-            }
         }
+
+        Optional<Category> optional = categoryRepository.findById(categoryDto.getId());
+        if (optional.isEmpty()) {
+            return -1;
+        }
+        category = optional.get();
         category.setName(categoryDto.getName());
         category.setFilters(categoryDto.getFilters());
         return categoryRepository.save(category).getId();
@@ -86,12 +87,14 @@ public class ItemsService {
      * @param id Category id
      * @throws java.util.NoSuchElementException if trying to delete non-existing category
      */
+
+
     public int deleteCategory(int id) {
-        Category category = categoryRepository.findById(id).get();
-        if (category == null) {
+        Optional<Category> category = categoryRepository.findById(id);
+        if (category.isEmpty()) {
             return -1;
         }
-        categoryRepository.delete(category);
+        categoryRepository.delete(category.get());
         return id;
     }
 
