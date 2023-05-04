@@ -68,7 +68,8 @@
               "browserTarget": "kum-archaeodb-web:build:production"
             },
             "development": {
-              "browserTarget": "kum-archaeodb-web:build:development"
+              "browserTarget": "kum-archaeodb-web:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
