@@ -14,12 +14,15 @@ import { MatInputModule } from "@angular/material/input";
 import { CategoryDeleteDialogComponent } from './category-list/category-delete-dialog/category-delete-dialog.component';
 
 
+
 @NgModule({
   declarations: [
     CategoryListComponent,
     CategoryEditComponent,
     CategoryDeleteDialogComponent
   ],
+
+
   imports: [
     CommonModule,
     CategoriesRoutingModule,

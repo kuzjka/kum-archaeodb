@@ -68,13 +68,16 @@ public class ItemsService {
         Category category;
         if (categoryDto.getId() == null) {
             category = new Category();
-        }
+        } else {
 
-        Optional<Category> optional = categoryRepository.findById(categoryDto.getId());
-        if (optional.isEmpty()) {
-            return -1;
+            Optional<Category> optional = categoryRepository.findById(categoryDto.getId());
+            if (optional.isEmpty()) {
+                return -1;
+            } else {
+                category = optional.get();
+            }
+
         }
-        category = optional.get();
         category.setName(categoryDto.getName());
         category.setFilters(categoryDto.getFilters());
         return categoryRepository.save(category).getId();
