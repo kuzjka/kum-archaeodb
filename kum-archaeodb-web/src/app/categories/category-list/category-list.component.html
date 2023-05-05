@@ -1,10 +1,7 @@
 <div class="actions-bar">
   <button mat-raised-button (click)="addCategory()">Додати</button>
-  <button mat-raised-button (click)="getCategories()">Взяти</button>
 </div>
-
 <div>Всього категорій: {{ categories.length }}</div>
-
 <table mat-table [dataSource]="categories">
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Назва</th>
@@ -25,7 +22,6 @@
       </button>
     </td>
   </ng-container>
-
   <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: tableColumns"></tr>
 </table>
