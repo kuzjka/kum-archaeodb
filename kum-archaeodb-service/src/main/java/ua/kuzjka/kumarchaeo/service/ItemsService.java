@@ -25,6 +25,16 @@ public class ItemsService {
     }
 
     /**
+     * Gets all items
+     *
+     * @return List of items
+     */
+
+     public List<ItemDto> getItems() {
+        return itemRepository.findAll().stream().map(ItemDto::new).collect(Collectors.toList());
+    }
+
+    /**
      * Gets all categories.
      *
      * @return List of categories

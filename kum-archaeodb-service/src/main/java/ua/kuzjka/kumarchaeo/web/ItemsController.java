@@ -1,10 +1,12 @@
 package ua.kuzjka.kumarchaeo.web;
 
 
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.kuzjka.kumarchaeo.dto.CategoryDto;
+import ua.kuzjka.kumarchaeo.dto.ItemDto;
 import ua.kuzjka.kumarchaeo.service.ItemsService;
 
 import java.util.List;
@@ -19,6 +21,10 @@ public class ItemsController {
         this.itemsService = itemsService;
     }
 
+    @GetMapping("/items")
+    public List<ItemDto> getItems(){
+        return itemsService.getItems();
+    }
     @GetMapping("/categoryNames")
     public List<String> getCategoryNames() {
         return itemsService.getCategoryNames();

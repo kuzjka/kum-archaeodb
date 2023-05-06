@@ -42,3 +42,5 @@ insert into categories(id, name) values (3, 'Вогнепальна зброя')
 insert into category_filters  (category_id, filter) values (1, 'Куля');
 insert into category_filters  (category_id, filter) values (2, 'Вухналь, Підкова');
 insert into category_filters  (category_id, filter) values (3, 'Мушкет');
+
+insert into items(id, item_type, name, year_, number, sub_number, category_id) values (4, 'I', 'Куля свинцева з хвостиком', 2021, 1, 1, 1);
