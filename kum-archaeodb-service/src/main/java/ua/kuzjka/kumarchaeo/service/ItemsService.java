@@ -36,6 +36,23 @@ public class ItemsService {
     public List<ItemParsingDto> parse(String data, boolean decimal) throws IOException {
         return this.itemListParser.parseCsv(data, decimal);
     }
+
+
+    public void confirmParsed(List<ItemParsingDto> dtoList) {
+
+        for (ItemParsingDto dto : dtoList) {
+            Item item = new Item();
+
+            item.setName(dto.getName());
+            item.setPointNumber(dto.getNumber());
+            Category category = categoryRepository.findByName(dto.getCategory()).get();
+            item.setCategory(category);
+            item.setLocation(dto.getLocation());
+
+            itemRepository.save(item);
+        }
+    }
+
     /**
      * Gets all items
      *

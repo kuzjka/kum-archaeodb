@@ -36,7 +36,9 @@ getCategoryNames():Observable<string[]>{
   parse(data: string |null): Observable<ParsedItem[]> {
     return this.http.post<ParsedItem[]>('/api/items/parse', data);
   }
-
+  addParsed(data: ParsedItem[]): Observable<any> {
+    return this.http.post<any>('/api/items/addParsed', data);
+  }
   editCategory(category: Category): Observable<any> {
     let id = category.id;
     let name = category.name;

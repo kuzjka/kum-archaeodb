@@ -85,7 +85,11 @@ export class ItemsImportComponent implements OnInit {
   }
 
   save(): void {
+    this.service.addParsed(this.parsedItems).subscribe(data=>{
+      alert('o');
+    })
     console.log("Saving data:\n" + JSON.stringify(this.parsedItemsFiltered, null, 2));
+
     const count = this.parsedItemsFiltered.length;
     this.snackBar.open(`Додано ${count} ${this.makePluralItems(count)}`, undefined, { duration: 3000 })
     this.router.navigate(['items'])

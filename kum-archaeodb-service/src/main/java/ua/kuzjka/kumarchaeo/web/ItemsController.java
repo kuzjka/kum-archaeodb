@@ -47,7 +47,10 @@ public class ItemsController {
     public List<ItemParsingDto> parse(@RequestBody String data) throws IOException {
         return itemsService.parse(data, true);
     }
-
+    @PostMapping("/items/addParsed")
+    public void addParsed(@RequestBody List<ItemParsingDto> dtoList) throws IOException {
+        itemsService.confirmParsed(dtoList);
+    }
     @PutMapping("/categories")
     public ResponseEntity updateCategory(@RequestBody CategoryDto dto) {
         int code = itemsService.saveCategory(dto);
