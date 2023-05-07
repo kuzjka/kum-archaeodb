@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.kuzjka.kumarchaeo.dto.CategoryDto;
 import ua.kuzjka.kumarchaeo.dto.ItemDto;
+import ua.kuzjka.kumarchaeo.dto.ItemParsingDto;
 import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Item;
+import ua.kuzjka.kumarchaeo.parsing.ItemListParser;
 import ua.kuzjka.kumarchaeo.repository.CategoryRepository;
 import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,18 +22,26 @@ public class ItemsService {
     private ItemRepository itemRepository;
     private CategoryRepository categoryRepository;
 
-    public ItemsService(@Autowired ItemRepository itemRepository, @Autowired CategoryRepository categoryRepository) {
+    private ItemListParser itemListParser;
+
+    public ItemsService(@Autowired ItemRepository itemRepository,
+                        @Autowired CategoryRepository categoryRepository,
+                        @Autowired ItemListParser itemListParser) {
         this.itemRepository = itemRepository;
         this.categoryRepository = categoryRepository;
+        this.itemListParser = itemListParser;
     }
 
+
+    public List<ItemParsingDto> parse(String data, boolean decimal) throws IOException {
+        return this.itemListParser.parseCsv(data, decimal);
+    }
     /**
      * Gets all items
      *
      * @return List of items
      */
-
-     public List<ItemDto> getItems() {
+    public List<ItemDto> getItems() {
         return itemRepository.findAll().stream().map(ItemDto::new).collect(Collectors.toList());
     }
 

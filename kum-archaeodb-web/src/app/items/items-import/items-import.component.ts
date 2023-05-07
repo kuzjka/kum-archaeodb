@@ -5,6 +5,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ParsedItem } from "../items.model";
 import { delay, of } from "rxjs";
 import { Router } from "@angular/router";
+import {ItemsService} from "../../items.service";
 
 @Component({
   selector: 'app-items-import',
@@ -27,14 +28,14 @@ export class ItemsImportComponent implements OnInit {
   bulletControls: Array<ParsedItemFormControls> = [];
   duplicates: Array<ParsedItem> = [];
 
-  categories: Array<string> = [];
+  categories!: string [];
 
   bulletCategory = 'Кулі';
 
-  constructor (private snackBar: MatSnackBar, private router: Router) {}
+  constructor (private snackBar: MatSnackBar, private router: Router, private service:ItemsService) {}
 
   ngOnInit(): void {
-    this.categories = this.getCategories();
+    this.getCategories();
   }
 
   onFileSelected(event: any): void {
@@ -63,16 +64,19 @@ export class ItemsImportComponent implements OnInit {
   parse(): void {
     console.log(`Sending parse data: text length: ${this.csvField.value?.length}, delimiter: ${this.delimiterField.value}`);
     this.loading = true;
-    of(this.generateParsedItems()).pipe(delay(500)).subscribe(items =>
+    this.service.parse(this.csvField.value).subscribe(items =>
     {
+
+
       this.parsedItems = items;
+      alert(this.parsedItems);
       this.overwriteField.setValue(false);
       this.parsedItemsFiltered = items.filter(i => !i.numberExists);
       this.duplicates = items.filter(i => i.numberExists);
       this.parsedItemControls = this.createFormControls(this.parsedItemsFiltered);
       this.loading = false;
-    });
-  }
+
+  })};
 
   onOverwriteChanged(): void {
     this.parsedItemsFiltered = this.overwriteField.value ? this.parsedItems
@@ -162,8 +166,10 @@ export class ItemsImportComponent implements OnInit {
       }));
   }
 
-  getCategories(): Array<string> {
-    return ["Кулі", "Спорядження вершника", "Холодна зброя"]
+  getCategories()  {
+    this.service.getCategoryNames().subscribe(data=>{
+      this.categories = data;
+    });
   }
 
   onCategoryChanged(controls: ParsedItemFormControls): void {

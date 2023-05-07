@@ -8,6 +8,7 @@ import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Item;
 import ua.kuzjka.kumarchaeo.model.Location;
 import ua.kuzjka.kumarchaeo.model.PointNumber;
+import ua.kuzjka.kumarchaeo.parsing.ItemListParser;
 import ua.kuzjka.kumarchaeo.repository.CategoryRepository;
 import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
@@ -26,13 +27,14 @@ public class ItemsServiceTest {
     private CategoryRepository categoryRepository;
 
     private ItemsService service;
-
+    private ItemListParser itemListParser;
 
     @BeforeEach
     public void setUp() {
         itemRepository = mock(ItemRepository.class);
         categoryRepository = mock(CategoryRepository.class);
-        service = new ItemsService(itemRepository, categoryRepository);
+        itemListParser = mock(ItemListParser.class);
+        service = new ItemsService(itemRepository, categoryRepository, itemListParser);
     }
 
     @Test

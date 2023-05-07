@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.kuzjka.kumarchaeo.dto.CategoryDto;
 import ua.kuzjka.kumarchaeo.dto.ItemDto;
+import ua.kuzjka.kumarchaeo.dto.ItemParsingDto;
 import ua.kuzjka.kumarchaeo.service.ItemsService;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -22,9 +24,10 @@ public class ItemsController {
     }
 
     @GetMapping("/items")
-    public List<ItemDto> getItems(){
+    public List<ItemDto> getItems() {
         return itemsService.getItems();
     }
+
     @GetMapping("/categoryNames")
     public List<String> getCategoryNames() {
         return itemsService.getCategoryNames();
@@ -38,6 +41,11 @@ public class ItemsController {
     @PostMapping("/categories")
     public int addCategory(@RequestBody CategoryDto dto) {
         return itemsService.saveCategory(dto);
+    }
+
+    @PostMapping("/items/parse")
+    public List<ItemParsingDto> parse(@RequestBody String data) throws IOException {
+        return itemsService.parse(data, true);
     }
 
     @PutMapping("/categories")
