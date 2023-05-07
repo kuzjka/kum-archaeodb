@@ -16,7 +16,7 @@ export class ItemsRequest {
 export interface Item {
   name: string;
   year?: number;
-  pointNumber: string;
+  number: string;
   hectare?: number;
   depth?: number;
   location: Location;

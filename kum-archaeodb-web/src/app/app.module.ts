@@ -11,7 +11,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { AppRoutingModule } from "./app-routing.module";
 import { MatButtonModule } from "@angular/material/button";
 import {HttpClientModule} from "@angular/common/http";
-import {CategoryService} from "./category.service";
+import {ItemsService} from "./items.service";
 
 
 
@@ -30,7 +30,7 @@ import {CategoryService} from "./category.service";
     MatToolbarModule,
     MatButtonModule
   ],
-providers:[CategoryService],
+providers:[ItemsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

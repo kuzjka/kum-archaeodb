@@ -2,15 +2,18 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Category} from "./categories/categories.model";
+import {Item} from "./items/items.model";
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
+export class ItemsService {
   constructor(private http: HttpClient) {
   }
-
+getItems():Observable<Item[]>{
+    return this.http.get<Item[]>('/api/items');
+}
   getCategories(): Observable<Category[]> {
     return this.http.get<Category[]>('/api/categories');
   }

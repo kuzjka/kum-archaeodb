@@ -3,20 +3,20 @@ import {Category} from "../categories.model";
 import {MatDialog} from "@angular/material/dialog";
 import {CategoryEditComponent} from "./category-edit/category-edit.component";
 import {CategoryDeleteDialogComponent} from "./category-delete-dialog/category-delete-dialog.component";
-import {CategoryService} from "../../category.service";
+import {ItemsService} from "../../items.service";
 
 
 @Component({
   selector: 'app-category-list',
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.css'],
-  providers: [CategoryService]
+  providers: [ItemsService]
 })
 export class CategoryListComponent implements OnInit {
   categories!: Category  [];
   tableColumns = ['name', 'filters', 'actions'];
 
-  constructor(public dialog: MatDialog, public service: CategoryService) {
+  constructor(public dialog: MatDialog, public service: ItemsService) {
   }
 
   getCategories() {
