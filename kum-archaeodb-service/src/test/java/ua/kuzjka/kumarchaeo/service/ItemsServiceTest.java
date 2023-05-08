@@ -156,7 +156,7 @@ public class ItemsServiceTest {
         assertEquals(125, dto.getId());
         assertEquals("Item Name", dto.getName());
         assertEquals(2022, dto.getYear());
-        assertEquals("14/1", dto.getNumber());
+        assertEquals("14/1", dto.getPointNumber());
         assertEquals(5, dto.getHectare());
         assertEquals(25, dto.getDepth());
         assertEquals(1.2f, dto.getLocation().getLatitude());

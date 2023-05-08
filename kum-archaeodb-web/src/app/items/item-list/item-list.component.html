@@ -4,7 +4,10 @@
 </div>
 
 <div>Всього знахідок: <b>{{ totalItems }}</b></div>
-<div><button mat-raised-button *ngFor="let page of pages" (click)="getItems(page)">{{page+1}}</button></div>
+<div><span *ngFor="let page of pages">
+  <button *ngIf="page!=selectedPage" mat-raised-button (click)="getItems(page)">{{page + 1}}</button>
+  <button *ngIf="page==selectedPage" mat-raised-button color="primary">{{page + 1}}</button>
+</span></div>
 <p></p>
 <table mat-table [dataSource]="items" multiTemplateDataRows>
   <ng-container matColumnDef="pointNumber">
@@ -53,6 +56,6 @@
 
   <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true;"></tr>
   <tr mat-row *matRowDef="let row; columns: columnsToDisplay" (click)="row.isExpanded = !row.isExpanded"
-    class="item-row"></tr>
+      class="item-row"></tr>
   <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="expanded-detail-row"></tr>
 </table>

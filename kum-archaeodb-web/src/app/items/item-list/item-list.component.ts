@@ -23,7 +23,7 @@ export class ItemListComponent implements OnInit {
   columnsToDisplay = ['pointNumber', 'name', 'category', 'dimensions', 'latitude', 'longitude'];
   items!: Item[];
   pages!: number[];
-
+  selectedPage!:number;
   constructor(private service: ItemsService) {
   }
   getItems(page:number) {
@@ -32,6 +32,7 @@ export class ItemListComponent implements OnInit {
       this.totalItems = data.totalCount;
       this.totalPages = data.totalPages;
       this.getPages();
+      this.selectedPage = page;
     })
   }
   getPages() {

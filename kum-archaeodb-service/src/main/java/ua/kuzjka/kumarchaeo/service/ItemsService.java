@@ -45,21 +45,26 @@ public class ItemsService {
 
         for (ItemParsingDto dto : dtoList) {
             Item item = new Item();
-
             item.setName(dto.getName());
             item.setPointNumber(dto.getNumber());
             Category category = categoryRepository.findByName(dto.getCategory()).get();
             item.setCategory(category);
             item.setLocation(dto.getLocation());
-
+            item.setDimensions(dto.getDimensions());
+            item.setHectare(dto.getHectare());
             itemRepository.save(item);
         }
     }
 
     /**
-     * Gets all items
+     * returns page dto with list of ItemDto
      *
-     * @return List of items
+     * @param page
+     * @param size
+     * @param categories
+     * @param sort
+     * @param order
+     * @return page dto
      */
     public PageDto getItems(int page, int size, String categories, String sort, String order) {
         List<ItemDto> items;
