@@ -20,18 +20,28 @@ import {ItemsService} from "../../items.service";
 export class ItemListComponent implements OnInit {
   totalItems: number = 0;
   totalPages: number = 0;
-
   columnsToDisplay = ['pointNumber', 'name', 'category', 'dimensions', 'latitude', 'longitude'];
   items!: Item[];
-    constructor(private service: ItemsService) {
+  pages!: number[];
+
+  constructor(private service: ItemsService) {
   }
-  getItems() {
-    this.service.getItems().subscribe(data => {
-      this.items = data;
-      this.totalItems = data.length;
+  getItems(page:number) {
+    this.service.getItems(page).subscribe(data => {
+      this.items = data.content;
+      this.totalItems = data.totalCount;
+      this.totalPages = data.totalPages;
+      this.getPages();
     })
   }
+  getPages() {
+    this.pages = [];
+    for (let i = 0; i < this.totalPages; i++) {
+
+      this.pages.push(i);
+    }
+  }
   ngOnInit(): void {
-    this.getItems();
+    this.getItems(0);
   }
 }

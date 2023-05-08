@@ -4,11 +4,12 @@
 </div>
 
 <div>Всього знахідок: <b>{{ totalItems }}</b></div>
-
+<div><button mat-raised-button *ngFor="let page of pages" (click)="getItems(page)">{{page+1}}</button></div>
+<p></p>
 <table mat-table [dataSource]="items" multiTemplateDataRows>
   <ng-container matColumnDef="pointNumber">
     <th mat-header-cell *matHeaderCellDef>Номер</th>
-    <td mat-cell *matCellDef="let item">{{ item.number }}</td>
+    <td mat-cell *matCellDef="let item">{{ item.pointNumber }}</td>
   </ng-container>
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Назва</th>

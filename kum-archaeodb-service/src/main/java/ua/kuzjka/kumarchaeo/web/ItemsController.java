@@ -2,12 +2,14 @@ package ua.kuzjka.kumarchaeo.web;
 
 
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.kuzjka.kumarchaeo.dto.CategoryDto;
 import ua.kuzjka.kumarchaeo.dto.ItemDto;
 import ua.kuzjka.kumarchaeo.dto.ItemParsingDto;
+import ua.kuzjka.kumarchaeo.dto.PageDto;
 import ua.kuzjka.kumarchaeo.service.ItemsService;
 
 import java.io.IOException;
@@ -24,8 +26,14 @@ public class ItemsController {
     }
 
     @GetMapping("/items")
-    public List<ItemDto> getItems() {
-        return itemsService.getItems();
+    public PageDto getItems(@RequestParam int page,
+                            @RequestParam int size,
+                            @RequestParam(required = false) String categories,
+                            @RequestParam(required = false) String sort,
+                            @RequestParam (required = false) String order
+
+                                  ) {
+        return itemsService.getItems(page, size, categories, sort, order);
     }
 
     @GetMapping("/categoryNames")

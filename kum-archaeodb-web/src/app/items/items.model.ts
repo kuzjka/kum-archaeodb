@@ -1,4 +1,4 @@
-import { Location } from "../commons.model";
+import {Location} from "../commons.model";
 
 export class ItemsRequest {
   page: number;
@@ -13,10 +13,16 @@ export class ItemsRequest {
   }
 }
 
+export interface PageDto {
+  totalCount: number;
+  totalPages: number;
+  content: Item[];
+}
+
 export interface Item {
   name: string;
   year?: number;
-  number: string;
+  pointNumber: string;
   hectare?: number;
   depth?: number;
   location: Location;

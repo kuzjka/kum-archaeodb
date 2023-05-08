@@ -1,10 +1,13 @@
 package ua.kuzjka.kumarchaeo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ua.kuzjka.kumarchaeo.dto.CategoryDto;
 import ua.kuzjka.kumarchaeo.dto.ItemDto;
 import ua.kuzjka.kumarchaeo.dto.ItemParsingDto;
+import ua.kuzjka.kumarchaeo.dto.PageDto;
 import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Item;
 import ua.kuzjka.kumarchaeo.parsing.ItemListParser;
@@ -58,8 +61,19 @@ public class ItemsService {
      *
      * @return List of items
      */
-    public List<ItemDto> getItems() {
-        return itemRepository.findAll().stream().map(ItemDto::new).collect(Collectors.toList());
+    public PageDto getItems(int page, int size, String categories, String sort, String order) {
+        List<ItemDto> items;
+        long totalCount;
+        long totalPages;
+        items = itemRepository.findAll(PageRequest.of(page, size)).stream().map(ItemDto::new).collect(Collectors.toList());
+        totalCount = itemRepository.count();
+        totalPages = itemRepository.findAll(PageRequest.of(0, size)).getTotalPages();
+        PageDto dto = new PageDto();
+        dto.setContent(items);
+        dto.setTotalCount(totalCount);
+        dto.setTotalPages(totalPages);
+        return dto;
+
     }
 
     /**
