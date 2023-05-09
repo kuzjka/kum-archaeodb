@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl } from "@angular/forms";
-import { StepperSelectionEvent } from "@angular/cdk/stepper";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { ParsedItem } from "../items.model";
-import { delay, of } from "rxjs";
-import { Router } from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {FormControl} from "@angular/forms";
+import {StepperSelectionEvent} from "@angular/cdk/stepper";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {ParsedItem} from "../items.model";
+import {delay, of} from "rxjs";
+import {Router} from "@angular/router";
 import {ItemsService} from "../../items.service";
 
 @Component({
@@ -32,7 +32,8 @@ export class ItemsImportComponent implements OnInit {
 
   bulletCategory = 'Кулі';
 
-  constructor (private snackBar: MatSnackBar, private router: Router, private service:ItemsService) {}
+  constructor(private snackBar: MatSnackBar, private router: Router, private service: ItemsService) {
+  }
 
   ngOnInit(): void {
     this.getCategories();
@@ -64,19 +65,15 @@ export class ItemsImportComponent implements OnInit {
   parse(): void {
     console.log(`Sending parse data: text length: ${this.csvField.value?.length}, delimiter: ${this.delimiterField.value}`);
     this.loading = true;
-    this.service.parse(this.csvField.value).subscribe(items =>
-    {
-
-
+    this.service.parse(this.csvField.value).subscribe(items => {
       this.parsedItems = items;
-      alert(this.parsedItems);
       this.overwriteField.setValue(false);
       this.parsedItemsFiltered = items.filter(i => !i.numberExists);
       this.duplicates = items.filter(i => i.numberExists);
       this.parsedItemControls = this.createFormControls(this.parsedItemsFiltered);
       this.loading = false;
-
-  })};
+    })
+  };
 
   onOverwriteChanged(): void {
     this.parsedItemsFiltered = this.overwriteField.value ? this.parsedItems
@@ -85,14 +82,12 @@ export class ItemsImportComponent implements OnInit {
   }
 
   save(): void {
-    this.service.addParsed(this.parsedItems).subscribe(data=>{
-      alert('o');
+    this.service.addParsed(this.parsedItems).subscribe(data => {
+      const count = this.parsedItemsFiltered.length;
+      this.snackBar.open(`Додано ${count} ${this.makePluralItems(count)}`, undefined, {duration: 3000})
+      this.router.navigate(['items'])
+      console.log("Saving data:\n" + JSON.stringify(this.parsedItemsFiltered, null, 2));
     })
-    console.log("Saving data:\n" + JSON.stringify(this.parsedItemsFiltered, null, 2));
-
-    const count = this.parsedItemsFiltered.length;
-    this.snackBar.open(`Додано ${count} ${this.makePluralItems(count)}`, undefined, { duration: 3000 })
-    this.router.navigate(['items'])
   }
 
   generateParsedItems(): Array<ParsedItem> {
@@ -100,7 +95,7 @@ export class ItemsImportComponent implements OnInit {
       {
         name: "Куля свинцева",
         pointNumber: "145",
-        location: { latitude: 12.34, longitude: 23.45 },
+        location: {latitude: 12.34, longitude: 23.45},
         hectare: 4,
         dimensions: "12x13x14",
         weight: 17,
@@ -120,7 +115,7 @@ export class ItemsImportComponent implements OnInit {
       {
         name: "Куля свинцева деформована",
         pointNumber: "149",
-        location: { latitude: 11.22, longitude: 22.33 },
+        location: {latitude: 11.22, longitude: 22.33},
         dimensions: "15x16x11",
         weight: 17,
         remarks: "remarks",
@@ -139,7 +134,7 @@ export class ItemsImportComponent implements OnInit {
       {
         name: "Вухналь залізний",
         pointNumber: "236/2",
-        location: { latitude: 21.43, longitude: 32.54 },
+        location: {latitude: 21.43, longitude: 32.54},
         hectare: 3,
         dimensions: "42х12",
         weight: 27,
@@ -170,8 +165,8 @@ export class ItemsImportComponent implements OnInit {
       }));
   }
 
-  getCategories()  {
-    this.service.getCategoryNames().subscribe(data=>{
+  getCategories() {
+    this.service.getCategoryNames().subscribe(data => {
       this.categories = data;
     });
   }

@@ -4,10 +4,13 @@
 </div>
 
 <div>Всього знахідок: <b>{{ totalItems }}</b></div>
-<div><span *ngFor="let page of pages">
-  <button *ngIf="page!=selectedPage" mat-raised-button (click)="getItems(page)">{{page + 1}}</button>
-  <button *ngIf="page==selectedPage" mat-raised-button color="primary">{{page + 1}}</button>
-</span></div>
+<div><mat-paginator  [length]="totalItems"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="[1, 2, 25, 100]"
+               aria-label="Select page" (page)="handlePage($event)">
+</mat-paginator></div>
+
+
 <p></p>
 <table mat-table [dataSource]="items" multiTemplateDataRows>
   <ng-container matColumnDef="pointNumber">

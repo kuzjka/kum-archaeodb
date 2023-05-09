@@ -42,7 +42,6 @@ public class ItemsService {
 
 
     public void confirmParsed(List<ItemParsingDto> dtoList) {
-
         for (ItemParsingDto dto : dtoList) {
             Item item = new Item();
             item.setName(dto.getName());
@@ -52,10 +51,12 @@ public class ItemsService {
             item.setLocation(dto.getLocation());
             item.setDimensions(dto.getDimensions());
             item.setHectare(dto.getHectare());
+            item.setGpsPoint(dto.getGpsPoint());
+            item.setRemarks(dto.getRemarks());
+            item.setWeight(dto.getWeight());
             itemRepository.save(item);
         }
     }
-
     /**
      * returns page dto with list of ItemDto
      *

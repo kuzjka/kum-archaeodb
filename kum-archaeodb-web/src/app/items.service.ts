@@ -12,8 +12,8 @@ export class ItemsService {
   constructor(private http: HttpClient) {
   }
 
-  getItems(page:number): Observable<PageDto> {
-    return this.http.get<PageDto>('/api/items?page=' + page + '&size=' + 2);
+  getItems(page:number, size:number): Observable<PageDto> {
+    return this.http.get<PageDto>('/api/items?page=' + page + '&size=' + size);
   }
 
   getCategories(): Observable<Category[]> {
