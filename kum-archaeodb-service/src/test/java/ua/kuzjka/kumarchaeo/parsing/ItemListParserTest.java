@@ -46,7 +46,7 @@ public class ItemListParserTest {
         when(itemRepository.findByPointNumber(any())).thenReturn(Optional.empty());
 
         InputStream in = getClass().getResourceAsStream("itemList.csv");
-        List<ItemParsingDto> items = parser.parseCsv(in, true);
+        List<ItemParsingDto> items = parser.parseCsv(in, '\t', true);
 
         assertEquals(6, items.size());
         ItemParsingDto item;
@@ -169,19 +169,38 @@ public class ItemListParserTest {
     }
 
     @Test
+    public void testCustomColumnSeparator() throws IOException {
+        String content = "268;Куля св з зал хвоста розплющена;22х17х6;11;;;7,048307;81,145097;705;;Трикутний ліс";
+
+        when(itemRepository.findByPointNumber(any())).thenReturn(Optional.empty());
+
+        List<ItemParsingDto> items = parser.parseCsv(content, ';', true);
+
+        assertEquals(1, items.size());
+
+        ItemParsingDto item = items.get(0);
+
+        assertEquals(268, item.getNumber().getNumber());
+        assertEquals("Куля св з зал хвоста розплющена", item.getName());
+        assertEquals("22х17х6", item.getDimensions());
+        assertEquals(11, item.getWeight(), 0.1f);
+        assertEquals(7.048307f, item.getLocation().getLatitude(), 0.000001f);
+        assertEquals(81.145097f, item.getLocation().getLongitude(), 0.000001f);
+        assertEquals("705", item.getGpsPoint());
+    }
+
+    @Test
     public void testParseExistingNumber() throws IOException {
         when(itemRepository.findByPointNumber(any())).thenReturn(Optional.of(new Item()));
 
         InputStream in = getClass().getResourceAsStream("itemList.csv");
-        List<ItemParsingDto> items = parser.parseCsv(in, true);
+        List<ItemParsingDto> items = parser.parseCsv(in, '\t', true);
 
         assertEquals(6, items.size());
 
         assertTrue(items.stream().noneMatch(ItemParsingDto::isSave));
         assertTrue(items.stream().allMatch(ItemParsingDto::isNumberExists));
     }
-
-
 
     @Test
     public void testAutodetectCategory() {
