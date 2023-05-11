@@ -12,7 +12,7 @@ export class ItemsService {
   constructor(private http: HttpClient) {
   }
 
-  getItems(page:number, size:number): Observable<PageDto> {
+  getItems(page: number, size: number): Observable<PageDto> {
     return this.http.get<PageDto>('/api/items?page=' + page + '&size=' + size);
   }
 
@@ -35,8 +35,8 @@ export class ItemsService {
     return this.http.post<any>('/api/categories', data);
   }
 
-  parse(data: string | null): Observable<ParsedItem[]> {
-    return this.http.post<ParsedItem[]>('/api/items/parse', data);
+  parse(data: string | null, delimiter: string | null): Observable<ParsedItem[]> {
+    return this.http.post<ParsedItem[]>('/api/items/parse?delimiter=' + delimiter, data);
   }
 
   addParsed(data: ParsedItem[]): Observable<any> {

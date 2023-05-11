@@ -52,8 +52,8 @@ public class ItemsController {
     }
 
     @PostMapping("/items/parse")
-    public List<ItemParsingDto> parse(@RequestBody String data) throws IOException {
-        return itemsService.parse(data, true);
+    public List<ItemParsingDto> parse(@RequestBody String data, @RequestParam String delimiter) throws IOException {
+        return itemsService.parse(data, delimiter,true);
     }
     @PostMapping("/items/addParsed")
     public void addParsed(@RequestBody List<ItemParsingDto> dtoList) throws IOException {

@@ -36,8 +36,16 @@ public class ItemsService {
     }
 
 
-    public List<ItemParsingDto> parse(String data, boolean decimal) throws IOException {
-        return this.itemListParser.parseCsv(data, decimal);
+    public List<ItemParsingDto> parse(String data, String delimiter, boolean decimal) throws IOException {
+        char columnSeparator = '0';
+        if (delimiter.equals("TAB")) {
+            columnSeparator = '\t';
+        } else if (delimiter.equals("COMMA")) {
+            columnSeparator = ',';
+        } else if (delimiter.equals("SEMICOLON")) {
+            columnSeparator = ';';
+        }
+        return this.itemListParser.parseCsv(data, columnSeparator, decimal);
     }
 
 
@@ -57,14 +65,12 @@ public class ItemsService {
             itemRepository.save(item);
         }
     }
+
     /**
      * returns page dto with list of ItemDto
      *
      * @param page
      * @param size
-     * @param categories
-     * @param sort
-     * @param order
      * @return page dto
      */
     public PageDto getItems(int page, int size) {

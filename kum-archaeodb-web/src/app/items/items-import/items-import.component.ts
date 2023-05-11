@@ -65,7 +65,7 @@ export class ItemsImportComponent implements OnInit {
   parse(): void {
     console.log(`Sending parse data: text length: ${this.csvField.value?.length}, delimiter: ${this.delimiterField.value}`);
     this.loading = true;
-    this.service.parse(this.csvField.value).subscribe(items => {
+    this.service.parse(this.csvField.value, this.delimiterField.value).subscribe(items => {
       this.parsedItems = items;
       this.overwriteField.setValue(false);
       this.parsedItemsFiltered = items.filter(i => !i.numberExists);
