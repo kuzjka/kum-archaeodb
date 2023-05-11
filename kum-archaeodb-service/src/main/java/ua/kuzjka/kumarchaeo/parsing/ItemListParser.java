@@ -68,28 +68,62 @@ public class ItemListParser {
         mapperCommasSeparator = new CsvMapper().registerModule(new CommaFloatJacksonModule());
     }
 
+    /**
+     * Parses CSV item list and auto-detects item properties, using tab as a column separator and period as
+     * a decimal fraction separator
+     * @param in            CSV contents
+     * @return              List of parsed items
+     * @throws IOException  If an exception occurs while reading or parsing the content
+     */
     public List<ItemParsingDto> parseCsv(InputStream in) throws IOException {
-        return parseCsv(in, false);
+        return parseCsv(in, '\t', false);
     }
 
+    /**
+     * Parses CSV item list and auto-detects item properties, using tab as a column separator and period as
+     * a decimal fraction separator
+     * @param str           CSV contents
+     * @return              List of parsed items
+     * @throws IOException  If an exception occurs while reading or parsing the content
+     */
     public List<ItemParsingDto> parseCsv(String str) throws IOException {
-        return parseCsv(str, false);
+        return parseCsv(str, '\t', false);
     }
 
-    public List<ItemParsingDto> parseCsv(InputStream in, boolean commaDecimalSeparators) throws IOException {
+    /**
+     * Parses CSV item list and auto-detects item properties.
+     * @param in                        CSV contents
+     * @param columnSeparator           Column separator character
+     * @param commaDecimalSeparators    Set to {@code true} if comma is used as a decimal separator
+     * @return                          List of parsed items
+     * @throws IOException              If an exception occurs while reading or parsing the content
+     */
+    public List<ItemParsingDto> parseCsv(InputStream in, char columnSeparator, boolean commaDecimalSeparators) throws IOException {
         ObjectMapper mapper = commaDecimalSeparators ? this.mapperCommasSeparator : this.mapper;
 
-        try (MappingIterator<ItemListEntry> it = mapper.readerFor(ItemListEntry.class).with(schema).readValues(in)) {
+        try (MappingIterator<ItemListEntry> it = mapper.readerFor(ItemListEntry.class)
+                .with(schema.withColumnSeparator(columnSeparator))
+                .readValues(in)) {
             List<ItemListEntry> entries = it.readAll();
 
             return entries.stream().map(this::parseItem).filter(Objects::nonNull).collect(Collectors.toList());
         }
     }
 
-    public List<ItemParsingDto> parseCsv(String str, boolean commaDecimalSeparators) throws IOException {
+    /**
+     * Parses CSV item list and auto-detects item properties.
+     * @param str                       CSV contents
+     * @param columnSeparator           Column separator character
+     * @param commaDecimalSeparators    Set to {@code true} if comma is used as a decimal separator
+     * @return                          List of parsed items
+     * @throws IOException              If an exception occurs while reading or parsing the content
+     */
+    public List<ItemParsingDto> parseCsv(String str, char columnSeparator, boolean commaDecimalSeparators) throws IOException {
         ObjectMapper mapper = commaDecimalSeparators ? this.mapperCommasSeparator : this.mapper;
 
-        try (MappingIterator<ItemListEntry> it = mapper.readerFor(ItemListEntry.class).with(schema).readValues(str)) {
+        try (MappingIterator<ItemListEntry> it = mapper.readerFor(ItemListEntry.class)
+                .with(schema.withColumnSeparator(columnSeparator))
+                .readValues(str)) {
             List<ItemListEntry> entries = it.readAll();
 
             return entries.stream().map(this::parseItem).filter(Objects::nonNull).collect(Collectors.toList());
