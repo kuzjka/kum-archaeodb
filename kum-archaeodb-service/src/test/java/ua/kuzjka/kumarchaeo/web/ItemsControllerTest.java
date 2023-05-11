@@ -7,6 +7,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.kuzjka.kumarchaeo.dto.CategoryDto;
+import ua.kuzjka.kumarchaeo.dto.ItemDto;
+import ua.kuzjka.kumarchaeo.dto.PageDto;
+import ua.kuzjka.kumarchaeo.model.Location;
 import ua.kuzjka.kumarchaeo.service.ItemsService;
 
 import java.util.ArrayList;
@@ -51,6 +54,57 @@ public class ItemsControllerTest {
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[1].name", is("Вогнепальна зброя")))
                 .andExpect(jsonPath("$[1].filters[0]", is("Мушкет")));
+    }
+
+    @Test
+    void getItemsTest() throws Exception {
+
+        List<ItemDto> items = new ArrayList<>();
+        PageDto pageDto = new PageDto();
+        ItemDto itemDto1 = new ItemDto();
+        itemDto1.setId(1);
+        itemDto1.setName("Куля свинцева з хвостиком");
+        itemDto1.setCategory("Кулі");
+        itemDto1.setPointNumber("1");
+        itemDto1.setYear(2021);
+        itemDto1.setLocation(new Location(11.111f, 22.222f));
+        itemDto1.setDimensions("17х17х20");
+
+        ItemDto itemDto2 = new ItemDto();
+        itemDto2.setId(2);
+        itemDto2.setName("Монета-солід, гаманець №1");
+        itemDto2.setCategory("Монети");
+        itemDto2.setPointNumber("362/1");
+        itemDto2.setYear(2021);
+        itemDto2.setLocation(new Location(33.333f, 44.444f));
+        items.add(itemDto1);
+        items.add(itemDto2);
+        pageDto.setContent(items);
+        pageDto.setTotalCount(items.size());
+        pageDto.setTotalPages(1);
+
+        given(itemsService.getItems(0, 25)).willReturn(pageDto);
+
+        this.mvc.perform(get("/api/items")
+                        .param("page", "0")
+                        .param("size", "25"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].id", is(1)))
+                .andExpect(jsonPath("$.content[0].name", is("Куля свинцева з хвостиком")))
+                .andExpect(jsonPath("$.content[0].category", is("Кулі")))
+                .andExpect(jsonPath("$.content[0].year", is(2021)))
+                .andExpect(jsonPath("$.content[0].pointNumber", is("1")))
+                .andExpect(jsonPath("$.content[0].location.latitude", is(11.111)))
+                .andExpect(jsonPath("$.content[0].location.longitude", is(22.222)))
+                .andExpect(jsonPath("$.content[0].dimensions", is("17х17х20")))
+                .andExpect(jsonPath("$.content[1].id", is(2)))
+                .andExpect(jsonPath("$.content[1].name", is("Монета-солід, гаманець №1")))
+                .andExpect(jsonPath("$.content[1].category", is("Монети")))
+                .andExpect(jsonPath("$.content[1].year", is(2021)))
+                .andExpect(jsonPath("$.content[1].pointNumber", is("362/1")))
+                .andExpect(jsonPath("$.content[1].location.latitude", is(33.333)))
+                .andExpect(jsonPath("$.content[1].location.longitude", is(44.444)));
+
     }
 
     @Test
@@ -120,6 +174,7 @@ public class ItemsControllerTest {
         this.mvc.perform(delete("/api/categories/1"))
                 .andExpect(status().isOk());
     }
+
     @Test
     void deleteNotFoundCategoryTest() throws Exception {
         given(this.itemsService.deleteCategory(4)).willReturn(-1);

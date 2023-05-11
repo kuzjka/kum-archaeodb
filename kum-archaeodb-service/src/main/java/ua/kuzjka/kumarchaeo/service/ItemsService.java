@@ -67,7 +67,7 @@ public class ItemsService {
      * @param order
      * @return page dto
      */
-    public PageDto getItems(int page, int size, String categories, String sort, String order) {
+    public PageDto getItems(int page, int size) {
         List<ItemDto> items;
         long totalCount;
         long totalPages;

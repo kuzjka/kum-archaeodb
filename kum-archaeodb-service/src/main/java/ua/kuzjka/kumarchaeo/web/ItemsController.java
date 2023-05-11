@@ -33,7 +33,7 @@ public class ItemsController {
                             @RequestParam (required = false) String order
 
                                   ) {
-        return itemsService.getItems(page, size, categories, sort, order);
+        return itemsService.getItems(page, size);
     }
 
     @GetMapping("/categoryNames")
