@@ -1,26 +1,29 @@
 package ua.kuzjka.kumarchaeo.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ua.kuzjka.kumarchaeo.dto.CategoryDto;
-import ua.kuzjka.kumarchaeo.dto.ItemDto;
-import ua.kuzjka.kumarchaeo.dto.PageDto;
+import ua.kuzjka.kumarchaeo.dto.*;
+import ua.kuzjka.kumarchaeo.model.Delimiter;
 import ua.kuzjka.kumarchaeo.model.Location;
+import ua.kuzjka.kumarchaeo.model.PointNumber;
 import ua.kuzjka.kumarchaeo.service.ItemsService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.BDDMockito.given;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @WebMvcTest(ItemsController.class)
@@ -121,6 +124,35 @@ public class ItemsControllerTest {
                 .andExpect(jsonPath("$[0]", is("Вогнепальна зброя")))
                 .andExpect(jsonPath("$[1]", is("Кулі")))
                 .andExpect(jsonPath("$[2]", is("Спорядження вершника")));
+    }
+
+    @Test
+    void parseTest() throws Exception {
+        ItemParsingRequestDto requestDto = new ItemParsingRequestDto();
+        requestDto.setData("6\\tКуля свинцева з хвостиком\\t17х17х19\\t26\\t17\\t\\t49,519675\\t31,538117\\t779\\tМаршрут 1\\t\\t\\n7\\tКуля свинцева деформована\\t17х18х13\\t19\\t\\t\\t49,519684\\t31,538224\\t780\\tМаршрут 1\\t\\t\\n\\t\\n");
+        requestDto.setDelimiter(Delimiter.TAB);
+        List<ItemParsingDto> items = new ArrayList<>();
+        ItemParsingDto item1 = new ItemParsingDto();
+        item1.setName("Куля свинцева з хвостиком");
+        item1.setNumber(new PointNumber(6, 0));
+        item1.setSave(true);
+        ItemParsingDto item2 = new ItemParsingDto();
+        item2.setName("Куля свинцева деформована");
+        item2.setNumber(new PointNumber(7, 0));
+        item2.setSave(true);
+        items.add(item1);
+        items.add(item2);
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(requestDto);
+        given(this.itemsService.parse(ArgumentMatchers.any(ItemParsingRequestDto.class), anyBoolean())).willReturn(items);
+
+        this.mvc.perform(post("/api/items/parse")
+                        .contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].name", is("Куля свинцева з хвостиком")))
+                .andExpect(jsonPath("$[1].name", is("Куля свинцева деформована")));
+
     }
 
     @Test

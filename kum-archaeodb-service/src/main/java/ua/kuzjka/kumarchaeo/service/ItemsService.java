@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ua.kuzjka.kumarchaeo.dto.CategoryDto;
-import ua.kuzjka.kumarchaeo.dto.ItemDto;
-import ua.kuzjka.kumarchaeo.dto.ItemParsingDto;
-import ua.kuzjka.kumarchaeo.dto.PageDto;
+import ua.kuzjka.kumarchaeo.dto.*;
 import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Delimiter;
 import ua.kuzjka.kumarchaeo.model.Item;
@@ -37,16 +34,16 @@ public class ItemsService {
     }
 
 
-    public List<ItemParsingDto> parse(String data, Delimiter delimiter, boolean decimal) throws IOException {
+    public List<ItemParsingDto> parse(ItemParsingRequestDto dto, boolean decimal) throws IOException {
         char columnSeparator = '0';
-        if (delimiter == Delimiter.TAB) {
+        if (dto.getDelimiter() == Delimiter.TAB) {
             columnSeparator = '\t';
-        } else if (delimiter == Delimiter.COMMA) {
+        } else if (dto.getDelimiter() == Delimiter.COMMA) {
             columnSeparator = ',';
-        } else if (delimiter == Delimiter.SEMICOLON) {
+        } else if (dto.getDelimiter() == Delimiter.SEMICOLON) {
             columnSeparator = ';';
         }
-        return this.itemListParser.parseCsv(data, columnSeparator, decimal);
+        return this.itemListParser.parseCsv(dto.getData(), columnSeparator, decimal);
     }
 
 

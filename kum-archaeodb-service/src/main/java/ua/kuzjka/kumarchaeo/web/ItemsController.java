@@ -50,7 +50,7 @@ public class ItemsController {
 
     @PostMapping("/items/parse")
     public List<ItemParsingDto> parse(@RequestBody ItemParsingRequestDto dto) throws IOException {
-        return itemsService.parse(dto.getData(), dto.getDelimiter(),true);
+        return itemsService.parse(dto,true);
     }
     @PostMapping("/items/addParsed")
     public void addParsed(@RequestBody List<ItemParsingDto> dtoList) throws IOException {
