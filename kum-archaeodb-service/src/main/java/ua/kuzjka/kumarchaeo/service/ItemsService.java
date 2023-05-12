@@ -9,6 +9,7 @@ import ua.kuzjka.kumarchaeo.dto.ItemDto;
 import ua.kuzjka.kumarchaeo.dto.ItemParsingDto;
 import ua.kuzjka.kumarchaeo.dto.PageDto;
 import ua.kuzjka.kumarchaeo.model.Category;
+import ua.kuzjka.kumarchaeo.model.Delimiter;
 import ua.kuzjka.kumarchaeo.model.Item;
 import ua.kuzjka.kumarchaeo.parsing.ItemListParser;
 import ua.kuzjka.kumarchaeo.repository.CategoryRepository;
@@ -36,13 +37,13 @@ public class ItemsService {
     }
 
 
-    public List<ItemParsingDto> parse(String data, String delimiter, boolean decimal) throws IOException {
+    public List<ItemParsingDto> parse(String data, Delimiter delimiter, boolean decimal) throws IOException {
         char columnSeparator = '0';
-        if (delimiter.equals("TAB")) {
+        if (delimiter == Delimiter.TAB) {
             columnSeparator = '\t';
-        } else if (delimiter.equals("COMMA")) {
+        } else if (delimiter == Delimiter.COMMA) {
             columnSeparator = ',';
-        } else if (delimiter.equals("SEMICOLON")) {
+        } else if (delimiter == Delimiter.SEMICOLON) {
             columnSeparator = ';';
         }
         return this.itemListParser.parseCsv(data, columnSeparator, decimal);

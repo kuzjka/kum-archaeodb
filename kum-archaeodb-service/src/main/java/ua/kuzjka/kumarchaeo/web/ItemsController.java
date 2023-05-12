@@ -6,10 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.kuzjka.kumarchaeo.dto.CategoryDto;
-import ua.kuzjka.kumarchaeo.dto.ItemDto;
-import ua.kuzjka.kumarchaeo.dto.ItemParsingDto;
-import ua.kuzjka.kumarchaeo.dto.PageDto;
+import ua.kuzjka.kumarchaeo.dto.*;
 import ua.kuzjka.kumarchaeo.service.ItemsService;
 
 import java.io.IOException;
@@ -52,8 +49,8 @@ public class ItemsController {
     }
 
     @PostMapping("/items/parse")
-    public List<ItemParsingDto> parse(@RequestBody String data, @RequestParam String delimiter) throws IOException {
-        return itemsService.parse(data, delimiter,true);
+    public List<ItemParsingDto> parse(@RequestBody ItemParsingRequestDto dto) throws IOException {
+        return itemsService.parse(dto.getData(), dto.getDelimiter(),true);
     }
     @PostMapping("/items/addParsed")
     public void addParsed(@RequestBody List<ItemParsingDto> dtoList) throws IOException {

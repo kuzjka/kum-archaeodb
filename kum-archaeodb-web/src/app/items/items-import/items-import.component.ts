@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {ParsedItem} from "../items.model";
+import {ItemParsingRequestDto, ParsedItem} from "../items.model";
 import {delay, of} from "rxjs";
 import {Router} from "@angular/router";
 import {ItemsService} from "../../items.service";
@@ -65,7 +65,7 @@ export class ItemsImportComponent implements OnInit {
   parse(): void {
     console.log(`Sending parse data: text length: ${this.csvField.value?.length}, delimiter: ${this.delimiterField.value}`);
     this.loading = true;
-    this.service.parse(this.csvField.value, this.delimiterField.value).subscribe(items => {
+    this.service.parse(new ItemParsingRequestDto(this.csvField.value, this.delimiterField.value)).subscribe(items => {
       this.parsedItems = items;
       this.overwriteField.setValue(false);
       this.parsedItemsFiltered = items.filter(i => !i.numberExists);

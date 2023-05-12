@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Category} from "./categories/categories.model";
-import {Item, PageDto, ParsedItem} from "./items/items.model";
+import {Item, ItemParsingRequestDto, PageDto, ParsedItem} from "./items/items.model";
 
 
 @Injectable({
@@ -35,8 +35,8 @@ export class ItemsService {
     return this.http.post<any>('/api/categories', data);
   }
 
-  parse(data: string | null, delimiter: string | null): Observable<ParsedItem[]> {
-    return this.http.post<ParsedItem[]>('/api/items/parse?delimiter=' + delimiter, data);
+  parse(data:ItemParsingRequestDto): Observable<ParsedItem[]> {
+    return this.http.post<ParsedItem[]>('/api/items/parse', data);
   }
 
   addParsed(data: ParsedItem[]): Observable<any> {

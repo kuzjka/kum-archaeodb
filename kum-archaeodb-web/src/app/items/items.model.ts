@@ -18,7 +18,15 @@ export interface PageDto {
   totalPages: number;
   content: Item[];
 }
+export class ItemParsingRequestDto{
+  data:string|null;
+  delimiter:string|null;
 
+  constructor(data: string|null, delimiter: string|null) {
+    this.data = data;
+    this.delimiter = delimiter;
+  }
+}
 export interface Item {
   name: string;
   year?: number;
