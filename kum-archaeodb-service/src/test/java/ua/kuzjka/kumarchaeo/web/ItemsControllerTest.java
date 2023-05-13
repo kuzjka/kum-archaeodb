@@ -20,8 +20,11 @@ import java.util.List;
 import static org.hamcrest.Matchers.*;
 
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 
+import static org.mockito.BDDMockito.willCallRealMethod;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -35,7 +38,6 @@ public class ItemsControllerTest {
 
     @Test
     void getCategoriesTest() throws Exception {
-
         List<String> filters1 = new ArrayList<>();
         List<String> filters2 = new ArrayList<>();
         List<CategoryDto> categories = new ArrayList<>();
@@ -49,7 +51,6 @@ public class ItemsControllerTest {
         this.mvc.perform(get("/api/categories")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(1)))
                 .andExpect(jsonPath("$[0].name", is("Кулі")))
@@ -61,7 +62,6 @@ public class ItemsControllerTest {
 
     @Test
     void getItemsTest() throws Exception {
-
         List<ItemDto> items = new ArrayList<>();
         PageDto pageDto = new PageDto();
         ItemDto itemDto1 = new ItemDto();
@@ -72,7 +72,6 @@ public class ItemsControllerTest {
         itemDto1.setYear(2021);
         itemDto1.setLocation(new Location(11.111f, 22.222f));
         itemDto1.setDimensions("17х17х20");
-
         ItemDto itemDto2 = new ItemDto();
         itemDto2.setId(2);
         itemDto2.setName("Монета-солід, гаманець №1");
@@ -85,9 +84,7 @@ public class ItemsControllerTest {
         pageDto.setContent(items);
         pageDto.setTotalCount(items.size());
         pageDto.setTotalPages(1);
-
         given(itemsService.getItems(0, 25)).willReturn(pageDto);
-
         this.mvc.perform(get("/api/items")
                         .param("page", "0")
                         .param("size", "25"))
@@ -112,7 +109,6 @@ public class ItemsControllerTest {
 
     @Test
     void getCategoryNamesTest() throws Exception {
-
         List<String> names = new ArrayList<>();
         names.add("Вогнепальна зброя");
         names.add("Кулі");
@@ -145,7 +141,6 @@ public class ItemsControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(requestDto);
         given(this.itemsService.parse(ArgumentMatchers.any(ItemParsingRequestDto.class), anyBoolean())).willReturn(items);
-
         this.mvc.perform(post("/api/items/parse")
                         .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isOk())
@@ -153,6 +148,27 @@ public class ItemsControllerTest {
                 .andExpect(jsonPath("$[0].name", is("Куля свинцева з хвостиком")))
                 .andExpect(jsonPath("$[1].name", is("Куля свинцева деформована")));
 
+    }
+
+    @Test
+    public void addParsedTest() throws Exception {
+        List<ItemParsingDto> items = new ArrayList<>();
+        ItemParsingDto item1 = new ItemParsingDto();
+        ItemParsingDto item2 = new ItemParsingDto();
+        item1.setNumber(new PointNumber(6, 0));
+        item1.setName("Куля свинцева з хвостиком");
+        item2.setNumber(new PointNumber(7, 0));
+        item2.setName("Куля свинцева деформована");
+        items.add(item1);
+        items.add(item2);
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(items);
+        this.mvc.perform(post("/api/items/addParsed")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk());
+
+        verify(itemsService).confirmParsed(anyList());
     }
 
     @Test
