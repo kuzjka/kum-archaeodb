@@ -127,10 +127,10 @@ public class ItemsService {
     }
 
     /**
-     * Saves new category or updates existing
+     * Saves new category or updates existing.
      *
-     * @param categoryDto
-     * @return id of category
+     * @param categoryDto   Category to add
+     * @return              ID of category or {@code -1} if the category is not found
      */
     public int saveCategory(CategoryDto categoryDto) {
         Category category;

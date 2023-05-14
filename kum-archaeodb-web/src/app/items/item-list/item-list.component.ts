@@ -25,7 +25,6 @@ export class ItemListComponent implements OnInit {
   items!: Item[];
   pages!: number[];
   currentPage: number = 0;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private service: ItemsService) {
   }

@@ -72,7 +72,7 @@ export class ItemsImportComponent implements OnInit {
       this.duplicates = items.filter(i => i.numberExists);
       this.parsedItemControls = this.createFormControls(this.parsedItemsFiltered);
       this.loading = false;
-    })
+    });
   }
 
   onOverwriteChanged(): void {
