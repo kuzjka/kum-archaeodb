@@ -152,8 +152,8 @@ public class ItemsService {
     /**
      * Deletes a category.
      *
-     * @param id Category id
-     * @throws java.util.NoSuchElementException if trying to delete non-existing category
+     * @param id    Category ID
+     * @return      Deleted category ID or {@code -1} if the category was not found
      */
     public int deleteCategory(int id) {
         Optional<Category> category = categoryRepository.findById(id);
