@@ -1,8 +1,8 @@
 package ua.kuzjka.kumarchaeo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ua.kuzjka.kumarchaeo.dto.*;
 import ua.kuzjka.kumarchaeo.model.Category;
@@ -33,7 +33,14 @@ public class ItemsService {
         this.itemListParser = itemListParser;
     }
 
-
+    /**
+     * Parses CSV string and returns list of items to confirm
+     *
+     * @param dto
+     * @param decimal
+     * @return list of items
+     * @throws IOException
+     */
     public List<ItemParsingDto> parse(ItemParsingRequestDto dto, boolean decimal) throws IOException {
         char columnSeparator = '0';
         if (dto.getDelimiter() == Delimiter.TAB) {
@@ -46,7 +53,11 @@ public class ItemsService {
         return this.itemListParser.parseCsv(dto.getData(), columnSeparator, decimal);
     }
 
-
+    /**
+     * Saves parsed items after confirmation
+     *
+     * @param dtoList
+     */
     public void confirmParsed(List<ItemParsingDto> dtoList) {
         for (ItemParsingDto dto : dtoList) {
             Item item = new Item();
@@ -65,25 +76,21 @@ public class ItemsService {
     }
 
     /**
-     * returns page dto with list of ItemDto
+     * Returns page of items
      *
      * @param page
      * @param size
-     * @return page dto
+     * @return page of items
      */
     public PageDto getItems(int page, int size) {
-        List<ItemDto> items;
-        long totalCount;
-        long totalPages;
-        items = itemRepository.findAll(PageRequest.of(page, size)).stream().map(ItemDto::new).collect(Collectors.toList());
-        totalCount = itemRepository.count();
-        totalPages = itemRepository.findAll(PageRequest.of(0, size)).getTotalPages();
+        Page<Item> itemPage;
+        itemPage = itemRepository.findAll(PageRequest.of(page, size));
+        List<ItemDto> items = itemPage.stream().map(ItemDto::new).collect(Collectors.toList());
         PageDto dto = new PageDto();
         dto.setContent(items);
-        dto.setTotalCount(totalCount);
-        dto.setTotalPages(totalPages);
+        dto.setTotalCount(itemPage.getTotalElements());
+        dto.setTotalPages(itemPage.getTotalPages());
         return dto;
-
     }
 
     /**
@@ -120,31 +127,27 @@ public class ItemsService {
     }
 
     /**
-     * Saves existing category or adds new.
+     * Saves new category or updates existing
      *
-     * @param categoryDto Category to add/update
+     * @param categoryDto
      * @return id of category
-     * @throws java.util.NoSuchElementException when trying to update non-existing category
      */
     public int saveCategory(CategoryDto categoryDto) {
         Category category;
         if (categoryDto.getId() == null) {
             category = new Category();
         } else {
-
             Optional<Category> optional = categoryRepository.findById(categoryDto.getId());
             if (optional.isEmpty()) {
                 return -1;
             } else {
                 category = optional.get();
             }
-
         }
         category.setName(categoryDto.getName());
         category.setFilters(categoryDto.getFilters());
         return categoryRepository.save(category).getId();
     }
-
 
     /**
      * Deletes a category.
@@ -152,8 +155,6 @@ public class ItemsService {
      * @param id Category id
      * @throws java.util.NoSuchElementException if trying to delete non-existing category
      */
-
-
     public int deleteCategory(int id) {
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isEmpty()) {

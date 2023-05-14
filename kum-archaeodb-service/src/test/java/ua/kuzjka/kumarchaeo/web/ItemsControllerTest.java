@@ -17,16 +17,15 @@ import ua.kuzjka.kumarchaeo.service.ItemsService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
-
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
-
-import static org.mockito.BDDMockito.willCallRealMethod;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @WebMvcTest(ItemsController.class)
@@ -147,7 +146,6 @@ public class ItemsControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name", is("Куля свинцева з хвостиком")))
                 .andExpect(jsonPath("$[1].name", is("Куля свинцева деформована")));
-
     }
 
     @Test
@@ -167,7 +165,6 @@ public class ItemsControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
-
         verify(itemsService).confirmParsed(anyList());
     }
 

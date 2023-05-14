@@ -30,7 +30,7 @@ import {ItemsService} from "./items.service";
     MatToolbarModule,
     MatButtonModule
   ],
-providers:[ItemsService],
+providers:[],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

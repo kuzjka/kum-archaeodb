@@ -73,7 +73,7 @@ export class ItemsImportComponent implements OnInit {
       this.parsedItemControls = this.createFormControls(this.parsedItemsFiltered);
       this.loading = false;
     })
-  };
+  }
 
   onOverwriteChanged(): void {
     this.parsedItemsFiltered = this.overwriteField.value ? this.parsedItems

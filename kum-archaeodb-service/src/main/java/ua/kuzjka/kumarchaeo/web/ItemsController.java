@@ -27,9 +27,7 @@ public class ItemsController {
                             @RequestParam int size,
                             @RequestParam(required = false) String categories,
                             @RequestParam(required = false) String sort,
-                            @RequestParam (required = false) String order
-
-                                  ) {
+                            @RequestParam(required = false) String order) {
         return itemsService.getItems(page, size);
     }
 
@@ -50,12 +48,14 @@ public class ItemsController {
 
     @PostMapping("/items/parse")
     public List<ItemParsingDto> parse(@RequestBody ItemParsingRequestDto dto) throws IOException {
-        return itemsService.parse(dto,true);
+        return itemsService.parse(dto, true);
     }
+
     @PostMapping("/items/addParsed")
     public void addParsed(@RequestBody List<ItemParsingDto> dtoList) throws IOException {
         itemsService.confirmParsed(dtoList);
     }
+
     @PutMapping("/categories")
     public ResponseEntity updateCategory(@RequestBody CategoryDto dto) {
         int code = itemsService.saveCategory(dto);
