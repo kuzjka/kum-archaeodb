@@ -10,22 +10,27 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 // Routing
 import { AppRoutingModule } from "./app-routing.module";
 import { MatButtonModule } from "@angular/material/button";
+import {HttpClientModule} from "@angular/common/http";
+import {ItemsService} from "./items.service";
+
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+
   ],
+
   imports: [
     BrowserModule,
     AppRoutingModule,
-
+    HttpClientModule,
     // Material
     BrowserAnimationsModule,
     MatToolbarModule,
     MatButtonModule
   ],
-  providers: [],
+providers:[],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -4,7 +4,14 @@
 </div>
 
 <div>Всього знахідок: <b>{{ totalItems }}</b></div>
+<div><mat-paginator  [length]="totalItems"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="[1, 2, 25, 100]"
+               aria-label="Select page" (page)="handlePage($event)">
+</mat-paginator></div>
 
+
+<p></p>
 <table mat-table [dataSource]="items" multiTemplateDataRows>
   <ng-container matColumnDef="pointNumber">
     <th mat-header-cell *matHeaderCellDef>Номер</th>
@@ -52,6 +59,6 @@
 
   <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true;"></tr>
   <tr mat-row *matRowDef="let row; columns: columnsToDisplay" (click)="row.isExpanded = !row.isExpanded"
-    class="item-row"></tr>
+      class="item-row"></tr>
   <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="expanded-detail-row"></tr>
 </table>

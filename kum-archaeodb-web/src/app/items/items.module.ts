@@ -19,6 +19,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatSelectModule } from "@angular/material/select";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatListModule } from "@angular/material/list";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 
 @NgModule({
@@ -26,24 +27,25 @@ import { MatListModule } from "@angular/material/list";
     ItemListComponent,
     ItemsImportComponent
   ],
-  imports: [
-    CommonModule,
-    ItemsRoutingModule,
-    ReactiveFormsModule,
+    imports: [
+        CommonModule,
+        ItemsRoutingModule,
+        ReactiveFormsModule,
 
-    // Material
-    MatButtonModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSnackBarModule,
-    MatStepperModule,
-    MatTableModule
-  ]
+        // Material
+        MatButtonModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatListModule,
+        MatProgressSpinnerModule,
+        MatRadioModule,
+        MatSelectModule,
+        MatSnackBarModule,
+        MatStepperModule,
+        MatTableModule,
+        MatPaginatorModule
+    ]
 })
 export class ItemsModule { }

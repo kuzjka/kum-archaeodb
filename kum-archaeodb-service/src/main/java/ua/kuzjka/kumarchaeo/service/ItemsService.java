@@ -1,14 +1,18 @@
 package ua.kuzjka.kumarchaeo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ua.kuzjka.kumarchaeo.dto.CategoryDto;
-import ua.kuzjka.kumarchaeo.dto.ItemDto;
+import ua.kuzjka.kumarchaeo.dto.*;
 import ua.kuzjka.kumarchaeo.model.Category;
+import ua.kuzjka.kumarchaeo.model.Delimiter;
 import ua.kuzjka.kumarchaeo.model.Item;
+import ua.kuzjka.kumarchaeo.parsing.ItemListParser;
 import ua.kuzjka.kumarchaeo.repository.CategoryRepository;
 import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,9 +23,74 @@ public class ItemsService {
     private ItemRepository itemRepository;
     private CategoryRepository categoryRepository;
 
-    public ItemsService(@Autowired ItemRepository itemRepository, @Autowired CategoryRepository categoryRepository) {
+    private ItemListParser itemListParser;
+
+    public ItemsService(@Autowired ItemRepository itemRepository,
+                        @Autowired CategoryRepository categoryRepository,
+                        @Autowired ItemListParser itemListParser) {
         this.itemRepository = itemRepository;
         this.categoryRepository = categoryRepository;
+        this.itemListParser = itemListParser;
+    }
+
+    /**
+     * Parses CSV string and returns list of items to confirm
+     *
+     * @param dto
+     * @param decimal
+     * @return list of items
+     * @throws IOException
+     */
+    public List<ItemParsingDto> parse(ItemParsingRequestDto dto, boolean decimal) throws IOException {
+        char columnSeparator = '0';
+        if (dto.getDelimiter() == Delimiter.TAB) {
+            columnSeparator = '\t';
+        } else if (dto.getDelimiter() == Delimiter.COMMA) {
+            columnSeparator = ',';
+        } else if (dto.getDelimiter() == Delimiter.SEMICOLON) {
+            columnSeparator = ';';
+        }
+        return this.itemListParser.parseCsv(dto.getData(), columnSeparator, decimal);
+    }
+
+    /**
+     * Saves parsed items after confirmation
+     *
+     * @param dtoList
+     */
+    public void confirmParsed(List<ItemParsingDto> dtoList) {
+        for (ItemParsingDto dto : dtoList) {
+            Item item = new Item();
+            item.setName(dto.getName());
+            item.setPointNumber(dto.getNumber());
+            Category category = categoryRepository.findByName(dto.getCategory()).get();
+            item.setCategory(category);
+            item.setLocation(dto.getLocation());
+            item.setDimensions(dto.getDimensions());
+            item.setHectare(dto.getHectare());
+            item.setGpsPoint(dto.getGpsPoint());
+            item.setRemarks(dto.getRemarks());
+            item.setWeight(dto.getWeight());
+            itemRepository.save(item);
+        }
+    }
+
+    /**
+     * Returns page of items
+     *
+     * @param page
+     * @param size
+     * @return page of items
+     */
+    public PageDto getItems(int page, int size) {
+        Page<Item> itemPage;
+        itemPage = itemRepository.findAll(PageRequest.of(page, size));
+        List<ItemDto> items = itemPage.stream().map(ItemDto::new).collect(Collectors.toList());
+        PageDto dto = new PageDto();
+        dto.setContent(items);
+        dto.setTotalCount(itemPage.getTotalElements());
+        dto.setTotalPages(itemPage.getTotalPages());
+        return dto;
     }
 
     /**
@@ -58,28 +127,27 @@ public class ItemsService {
     }
 
     /**
-     * Saves existing category or adds new.
+     * Saves new category or updates existing.
      *
-     * @param categoryDto Category to add/update
-     * @return id of category
-     * @throws java.util.NoSuchElementException when trying to update non-existing category
+     * @param categoryDto   Category to add
+     * @return              ID of category or {@code -1} if the category is not found
      */
     public int saveCategory(CategoryDto categoryDto) {
         Category category;
         if (categoryDto.getId() == null) {
             category = new Category();
+        } else {
+            Optional<Category> optional = categoryRepository.findById(categoryDto.getId());
+            if (optional.isEmpty()) {
+                return -1;
+            } else {
+                category = optional.get();
+            }
         }
-
-        Optional<Category> optional = categoryRepository.findById(categoryDto.getId());
-        if (optional.isEmpty()) {
-            return -1;
-        }
-        category = optional.get();
         category.setName(categoryDto.getName());
         category.setFilters(categoryDto.getFilters());
         return categoryRepository.save(category).getId();
     }
-
 
     /**
      * Deletes a category.
@@ -87,8 +155,6 @@ public class ItemsService {
      * @param id Category id
      * @throws java.util.NoSuchElementException if trying to delete non-existing category
      */
-
-
     public int deleteCategory(int id) {
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isEmpty()) {

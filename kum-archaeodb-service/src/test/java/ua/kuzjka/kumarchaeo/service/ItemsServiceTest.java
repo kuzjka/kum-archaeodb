@@ -8,6 +8,7 @@ import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Item;
 import ua.kuzjka.kumarchaeo.model.Location;
 import ua.kuzjka.kumarchaeo.model.PointNumber;
+import ua.kuzjka.kumarchaeo.parsing.ItemListParser;
 import ua.kuzjka.kumarchaeo.repository.CategoryRepository;
 import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
@@ -26,13 +27,14 @@ public class ItemsServiceTest {
     private CategoryRepository categoryRepository;
 
     private ItemsService service;
-
+    private ItemListParser itemListParser;
 
     @BeforeEach
     public void setUp() {
         itemRepository = mock(ItemRepository.class);
         categoryRepository = mock(CategoryRepository.class);
-        service = new ItemsService(itemRepository, categoryRepository);
+        itemListParser = mock(ItemListParser.class);
+        service = new ItemsService(itemRepository, categoryRepository, itemListParser);
     }
 
     @Test
@@ -154,7 +156,7 @@ public class ItemsServiceTest {
         assertEquals(125, dto.getId());
         assertEquals("Item Name", dto.getName());
         assertEquals(2022, dto.getYear());
-        assertEquals("14/1", dto.getNumber());
+        assertEquals("14/1", dto.getPointNumber());
         assertEquals(5, dto.getHectare());
         assertEquals(25, dto.getDepth());
         assertEquals(1.2f, dto.getLocation().getLatitude());

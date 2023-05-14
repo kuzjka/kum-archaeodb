@@ -7,7 +7,7 @@ public class ItemDto {
     private Integer id;
     private String name;
     private int year;
-    private String number;
+    private String pointNumber;
     private Integer hectare;
     private Integer depth;
     private Location location;
@@ -29,7 +29,7 @@ public class ItemDto {
         id = item.getId();
         name = item.getName();
         year = item.getYear();
-        number = item.getPointNumber().toString();
+        pointNumber = item.getPointNumber().toString();
         hectare = item.getHectare();
         depth = item.getDepth();
         location = item.getLocation();
@@ -68,12 +68,12 @@ public class ItemDto {
         this.year = year;
     }
 
-    public String getNumber() {
-        return number;
+    public String getPointNumber() {
+        return pointNumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setPointNumber(String pointNumber) {
+        this.pointNumber = pointNumber;
     }
 
     public Integer getHectare() {

@@ -58,7 +58,7 @@ public class ItemListParser {
 
     public ItemListParser(@Autowired CategoryRepository categoryRepository,
                           @Autowired ItemRepository itemRepository,
-                          @Value("Кулі") String bulletCategoryName) {
+                          @Value("${archaeodb.bulletsCategory}") String bulletCategoryName) {
         this.categoryRepository = categoryRepository;
         this.itemRepository = itemRepository;
         Optional<Category> bulletsCategory = categoryRepository.findByName(bulletCategoryName);

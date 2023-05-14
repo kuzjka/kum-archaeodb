@@ -1,7 +1,11 @@
 package ua.kuzjka.kumarchaeo.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import ua.kuzjka.kumarchaeo.dto.ItemDto;
 import ua.kuzjka.kumarchaeo.model.Item;
 import ua.kuzjka.kumarchaeo.model.PointNumber;
 
@@ -14,4 +18,6 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
      * @return  Optional item
      */
     Optional<Item> findByPointNumber(PointNumber pointNumber);
+
+    Page<Item> findAll(Pageable pageable);
 }
