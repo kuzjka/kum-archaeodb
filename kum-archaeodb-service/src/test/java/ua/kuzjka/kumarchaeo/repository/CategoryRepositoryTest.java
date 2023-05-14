@@ -26,13 +26,14 @@ public class CategoryRepositoryTest {
 
     @Test
     public void testGetCategory() {
-        assertEquals(1, repository.count());
+        assertTrue(repository.count() >= 1);
 
-        Category category = repository.findAll().get(0);
+        Optional<Category> category = repository.findByName("Existing Category");
 
-        assertEquals("Existing Category", category.getName());
-        assertTrue(category.getFilters().contains("Filter1"));
-        assertTrue(category.getFilters().contains("Filter2"));
+        assertTrue(category.isPresent());
+        assertEquals("Existing Category", category.get().getName());
+        assertTrue(category.get().getFilters().contains("Filter1"));
+        assertTrue(category.get().getFilters().contains("Filter2"));
     }
 
     @Test
@@ -42,7 +43,7 @@ public class CategoryRepositoryTest {
         newCategory.setFilters(List.of("NewFilter1", "NewFilter2"));
         repository.save(newCategory);
 
-        assertEquals(2, repository.count());
+        assertTrue(repository.count() >= 2);
         Optional<Category> category = repository.findAll().stream()
                 .filter(c -> "New Category".equals(c.getName()))
                 .findFirst();
@@ -53,12 +54,12 @@ public class CategoryRepositoryTest {
 
     @Test
     public void testCategoryRemoved() {
-        assertEquals(1, repository.count());
+        long count = repository.count();
 
-        Category category = repository.findAll().get(0);
+        Category category = repository.findByName("Existing Category").orElseThrow();
         repository.delete(category);
 
-        assertEquals(0, repository.count());
+        assertEquals(count - 1, repository.count());
     }
 
     @Test

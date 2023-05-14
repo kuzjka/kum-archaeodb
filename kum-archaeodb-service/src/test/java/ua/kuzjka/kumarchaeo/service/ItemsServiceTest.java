@@ -2,6 +2,8 @@ package ua.kuzjka.kumarchaeo.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.stubbing.Answer;
 import ua.kuzjka.kumarchaeo.dto.CategoryDto;
 import ua.kuzjka.kumarchaeo.dto.ItemDto;
 import ua.kuzjka.kumarchaeo.model.Category;
@@ -74,12 +76,18 @@ public class ItemsServiceTest {
     @Test
     public void testAddNewCategory() {
         when(categoryRepository.findById(anyInt())).thenReturn(Optional.empty());
+        when(categoryRepository.save(ArgumentMatchers.any(Category.class)))
+                .then((Answer<? extends Category>) invocation -> {
+                    Category cat = invocation.getArgument(0, Category.class);
+                    cat.setId(123);
+                    return cat;
+                });
 
         CategoryDto dto = new CategoryDto(null, "New Category", List.of("Filter1", "Filter2"));
-        service.saveCategory(dto);
+        int id = service.saveCategory(dto);
 
+        assertEquals(123, id);
         verify(categoryRepository).save(argThat(cat ->
-                cat.getId() ==  null &&
                 cat.getName().equals("New Category") &&
                 cat.getFilters().containsAll(List.of("Filter1", "Filter2"))));
     }
@@ -90,6 +98,8 @@ public class ItemsServiceTest {
         cat.setId(234);
 
         when(categoryRepository.findById(234)).thenReturn(Optional.of(cat));
+        when(categoryRepository.save(ArgumentMatchers.any(Category.class)))
+                .then(invocation -> invocation.getArgument(0, Category.class));
 
         CategoryDto dto = new CategoryDto(234, "New Name", List.of("New Filter1", "New Filter2"));
         service.saveCategory(dto);
@@ -105,7 +115,7 @@ public class ItemsServiceTest {
        when(categoryRepository.findById(anyInt())).thenReturn(Optional.empty());
 
        CategoryDto dto = new CategoryDto(235, "New Name", List.of("Filter"));
-       assertThrows(NoSuchElementException.class, () -> service.saveCategory(dto));
+       assertEquals(-1, service.saveCategory(dto));
     }
 
     @Test
@@ -124,7 +134,7 @@ public class ItemsServiceTest {
     public void testDeleteNonExistingCategory() {
         when(categoryRepository.findById(anyInt())).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> service.deleteCategory(237));
+        assertEquals(-1, service.deleteCategory(237));
     }
 
     @Test

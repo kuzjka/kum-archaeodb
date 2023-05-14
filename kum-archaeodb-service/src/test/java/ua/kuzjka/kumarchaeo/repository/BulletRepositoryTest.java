@@ -3,6 +3,7 @@ package ua.kuzjka.kumarchaeo.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ua.kuzjka.kumarchaeo.model.*;
@@ -22,11 +23,12 @@ public class BulletRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Value("${archaeodb.bulletsCategory}")
+    private String bulletsCategory;
+
     @BeforeEach
     public void setUp() {
-        Category category = new Category();
-        category.setName("Bullets");
-        categoryRepository.save(category);
+        Category category = categoryRepository.findByName(bulletsCategory).orElseThrow();
 
         Location location = new Location(1.0f, 1.0f);
 
@@ -50,7 +52,7 @@ public class BulletRepositoryTest {
         Bullet bullet = repository.findAll().get(0);
         assertEquals("Bullet", bullet.getName());
         assertEquals(new PointNumber(111), bullet.getPointNumber());
-        assertEquals("Bullets", bullet.getCategory().getName());
+        assertEquals(bulletsCategory, bullet.getCategory().getName());
         assertEquals(1.0f, bullet.getLocation().getLongitude());
         assertEquals(1.0f, bullet.getLocation().getLatitude());
         assertEquals(14, bullet.getCaliber());
@@ -66,7 +68,7 @@ public class BulletRepositoryTest {
 
        Item item = itemRepository.findAll().get(0);
        assertEquals("Bullet", item.getName());
-       assertEquals("Bullets", item.getCategory().getName());
+       assertEquals(bulletsCategory, item.getCategory().getName());
     }
 
     @Test
