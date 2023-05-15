@@ -14,16 +14,16 @@
       </mat-form-field>
 
       <div>
-        <label>Розділювач:</label>
+        <label>Розділювач: </label>
         <mat-radio-group [formControl]="delimiterField">
           <mat-radio-button value="TAB">Табуляція</mat-radio-button>
           <mat-radio-button value="COMMA">Кома</mat-radio-button>
           <mat-radio-button value="SEMICOLON">Крапка з комою</mat-radio-button>
         </mat-radio-group>
-        <label>Розділювач десяткового дробу:</label>
+        <label> Розділювач десяткового дробу:</label>
         <mat-radio-group [formControl]="commaDecimalSeparatorsField">
           <mat-radio-button value="TRUE">Кома</mat-radio-button>
-          <mat-radio-button value="FALSE">Період</mat-radio-button>
+          <mat-radio-button value="FALSE">Крапка</mat-radio-button>
         </mat-radio-group>
         <button type="button" mat-raised-button (click)="parse()" class="button-ml">Перезавантажити</button>
       </div>
