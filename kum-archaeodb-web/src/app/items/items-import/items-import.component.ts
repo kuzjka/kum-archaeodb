@@ -3,7 +3,6 @@ import {FormControl} from "@angular/forms";
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ItemParsingRequestDto, ParsedItem} from "../items.model";
-import {delay, of} from "rxjs";
 import {Router} from "@angular/router";
 import {ItemsService} from "../../items.service";
 
@@ -88,70 +87,6 @@ export class ItemsImportComponent implements OnInit {
       this.router.navigate(['items'])
       console.log("Saving data:\n" + JSON.stringify(this.parsedItemsFiltered, null, 2));
     })
-  }
-
-  generateParsedItems(): Array<ParsedItem> {
-    return [
-      {
-        name: "Куля свинцева",
-        pointNumber: "145",
-        location: {latitude: 12.34, longitude: 23.45},
-        hectare: 4,
-        dimensions: "12x13x14",
-        weight: 17,
-        remarks: "remarks",
-        gpsPoint: "234н",
-        category: "Кулі",
-        caliber: 13,
-        caliberApproximate: false,
-        deformation: "NONE",
-        numberExists: false,
-        categoryAutodetected: true,
-        caliberAutodetected: true,
-        deformationAutodetected: false,
-        hectareAutodetected: true,
-        save: true
-      },
-      {
-        name: "Куля свинцева деформована",
-        pointNumber: "149",
-        location: {latitude: 11.22, longitude: 22.33},
-        dimensions: "15x16x11",
-        weight: 17,
-        remarks: "remarks",
-        gpsPoint: "11",
-        category: "Кулі",
-        caliber: 16,
-        caliberApproximate: true,
-        deformation: "LIGHT",
-        numberExists: true,
-        categoryAutodetected: true,
-        caliberAutodetected: false,
-        deformationAutodetected: true,
-        hectareAutodetected: false,
-        save: true
-      },
-      {
-        name: "Вухналь залізний",
-        pointNumber: "236/2",
-        location: {latitude: 21.43, longitude: 32.54},
-        hectare: 3,
-        dimensions: "42х12",
-        weight: 27,
-        remarks: "remarks",
-        gpsPoint: "432в",
-        category: "Спорядження вершника",
-        caliber: -1,
-        caliberApproximate: false,
-        deformation: "NONE",
-        numberExists: false,
-        categoryAutodetected: true,
-        caliberAutodetected: false,
-        deformationAutodetected: false,
-        hectareAutodetected: true,
-        save: true
-      }
-    ];
   }
 
   createFormControls(items: Array<ParsedItem>): Array<ParsedItemFormControls> {

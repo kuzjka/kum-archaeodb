@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Category} from "./categories/categories.model";
-import {Item, ItemParsingRequestDto, PageDto, ParsedItem} from "./items/items.model";
+import {ItemParsingRequestDto, PageDto, ParsedItem} from "./items/items.model";
 
 
 @Injectable({

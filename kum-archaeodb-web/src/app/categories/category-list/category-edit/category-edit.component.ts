@@ -18,8 +18,7 @@ export class CategoryEditComponent {
 
   constructor(
     private dialogRef: MatDialogRef<CategoryEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private fb: FormBuilder) {
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
     this.title = data.new ? "Створення категорії" : "Змінення категорії";
   }
 
