@@ -6,7 +6,7 @@
 <div>Всього знахідок: <b>{{ totalItems }}</b></div>
 <div><mat-paginator  [length]="totalItems"
                [pageSize]="pageSize"
-               [pageSizeOptions]="[1, 2, 25, 100]"
+               [pageSizeOptions]="[ 2, 25, 100]"
                aria-label="Select page" (page)="handlePage($event)">
 </mat-paginator></div>
 

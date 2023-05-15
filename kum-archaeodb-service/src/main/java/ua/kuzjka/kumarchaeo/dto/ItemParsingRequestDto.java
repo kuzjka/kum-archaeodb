@@ -7,6 +7,8 @@ public class ItemParsingRequestDto {
     private String data;
     private Delimiter delimiter;
 
+    private boolean commaDecimalSeparators;
+
     public ItemParsingRequestDto() {
     }
 
@@ -24,5 +26,13 @@ public class ItemParsingRequestDto {
 
     public void setDelimiter(Delimiter delimiter) {
         this.delimiter = delimiter;
+    }
+
+    public boolean isCommaDecimalSeparators() {
+        return commaDecimalSeparators;
+    }
+
+    public void setCommaDecimalSeparators(boolean commaDecimalSeparators) {
+        this.commaDecimalSeparators = commaDecimalSeparators;
     }
 }

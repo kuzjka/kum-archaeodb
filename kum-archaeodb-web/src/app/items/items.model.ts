@@ -21,10 +21,12 @@ export interface PageDto {
 export class ItemParsingRequestDto{
   data:string|null;
   delimiter:string|null;
+  commaDecimalSeparators:string|null;
 
-  constructor(data: string|null, delimiter: string|null) {
+  constructor(data: string|null, delimiter: string|null, commaDecimalSeparators:string|null) {
     this.data = data;
     this.delimiter = delimiter;
+    this.commaDecimalSeparators = commaDecimalSeparators;
   }
 }
 export interface Item {
