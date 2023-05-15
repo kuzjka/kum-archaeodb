@@ -20,7 +20,7 @@ import {MatPaginator} from "@angular/material/paginator";
 export class ItemListComponent implements OnInit {
   totalItems: number = 0;
   totalPages: number = 0;
-  pageSize: number = 2;
+  pageSize: number = 25;
   columnsToDisplay = ['pointNumber', 'name', 'category', 'dimensions', 'latitude', 'longitude'];
   items!: Item[];
   pages!: number[];

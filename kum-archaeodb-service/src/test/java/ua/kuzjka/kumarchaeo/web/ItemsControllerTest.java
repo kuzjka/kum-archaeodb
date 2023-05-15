@@ -139,7 +139,7 @@ public class ItemsControllerTest {
         items.add(item2);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(requestDto);
-        given(this.itemsService.parse(ArgumentMatchers.any(ItemParsingRequestDto.class), anyBoolean())).willReturn(items);
+        given(this.itemsService.parse(ArgumentMatchers.any(ItemParsingRequestDto.class))).willReturn(items);
         this.mvc.perform(post("/api/items/parse")
                         .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isOk())

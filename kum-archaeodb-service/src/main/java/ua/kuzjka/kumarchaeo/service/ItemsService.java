@@ -41,7 +41,7 @@ public class ItemsService {
      * @return list of items
      * @throws IOException
      */
-    public List<ItemParsingDto> parse(ItemParsingRequestDto dto, boolean decimal) throws IOException {
+    public List<ItemParsingDto> parse(ItemParsingRequestDto dto) throws IOException {
         char columnSeparator = '0';
         if (dto.getDelimiter() == Delimiter.TAB) {
             columnSeparator = '\t';
@@ -50,7 +50,7 @@ public class ItemsService {
         } else if (dto.getDelimiter() == Delimiter.SEMICOLON) {
             columnSeparator = ';';
         }
-        return this.itemListParser.parseCsv(dto.getData(), columnSeparator, decimal);
+        return this.itemListParser.parseCsv(dto.getData(), columnSeparator, dto.isCommaDecimalSeparators());
     }
 
     /**

@@ -17,7 +17,7 @@ export class ItemsImportComponent implements OnInit {
   csvField = new FormControl('')
   delimiterField = new FormControl('TAB')
   overwriteField = new FormControl(false)
-
+  commaDecimalSeparatorsField = new FormControl('TRUE')
   loading: boolean = false;
 
   parsedItems: Array<ParsedItem> = [];
@@ -65,7 +65,10 @@ export class ItemsImportComponent implements OnInit {
   parse(): void {
     console.log(`Sending parse data: text length: ${this.csvField.value?.length}, delimiter: ${this.delimiterField.value}`);
     this.loading = true;
-    this.service.parse(new ItemParsingRequestDto(this.csvField.value, this.delimiterField.value)).subscribe(items => {
+    this.service.parse(new ItemParsingRequestDto(this.csvField.value,
+      this.delimiterField.value,
+      this.commaDecimalSeparatorsField.value))
+      .subscribe(items => {
       this.parsedItems = items;
       this.overwriteField.setValue(false);
       this.parsedItemsFiltered = items.filter(i => !i.numberExists);
