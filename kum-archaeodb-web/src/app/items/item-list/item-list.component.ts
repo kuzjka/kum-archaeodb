@@ -3,6 +3,7 @@ import {Item} from "../items.model";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {ItemsService} from "../../items.service";
 import {MatPaginator} from "@angular/material/paginator";
+import {MatSort, Sort} from "@angular/material/sort";
 
 
 @Component({
@@ -25,19 +26,29 @@ export class ItemListComponent implements OnInit {
   items!: Item[];
   pages!: number[];
   currentPage: number = 0;
+  currentSort: string = 'pointNumber';
+  currentOrder: string = 'asc';
 
   constructor(private service: ItemsService) {
+  }
+
+  @ViewChild(MatSort) sort?: MatSort;
+
+  public handleSort(sortState: Sort) {
+    this.currentSort = sortState.active;
+    this.currentOrder = sortState.direction;
+    this.getItems(this.currentPage, this.pageSize, this.currentSort, this.currentOrder);
   }
 
   public handlePage(e: any) {
     this.currentPage = e.pageIndex;
     this.pageSize = e.pageSize;
-    this.getItems(this.currentPage, this.pageSize);
+    this.getItems(this.currentPage, this.pageSize, this.currentSort, this.currentOrder);
 
   }
 
-  getItems(page: number, size: number) {
-    this.service.getItems(page, size).subscribe(data => {
+  getItems(page: number, size: number, sort: string, order: string) {
+    this.service.getItems(page, size, sort, order).subscribe(data => {
       this.items = data.content;
       this.totalItems = data.totalCount;
       this.totalPages = data.totalPages;
@@ -45,13 +56,17 @@ export class ItemListComponent implements OnInit {
       this.currentPage = 0;
     })
   }
+
   getPages() {
     this.pages = [];
     for (let i = 0; i < this.totalPages; i++) {
       this.pages.push(i);
     }
   }
+
   ngOnInit(): void {
-    this.getItems(this.currentPage, this.pageSize);
+    this.getItems(this.currentPage, this.pageSize, this.currentSort, this.currentOrder);
   }
+
+
 }

@@ -83,10 +83,12 @@ public class ItemsControllerTest {
         pageDto.setContent(items);
         pageDto.setTotalCount(items.size());
         pageDto.setTotalPages(1);
-        given(itemsService.getItems(0, 25)).willReturn(pageDto);
+        given(itemsService.getItems(0, 25, "name", "ASC")).willReturn(pageDto);
         this.mvc.perform(get("/api/items")
                         .param("page", "0")
-                        .param("size", "25"))
+                        .param("size", "25")
+                .param("sort", "name")
+                .param("order", "ASC"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].id", is(1)))
                 .andExpect(jsonPath("$.content[0].name", is("Куля свинцева з хвостиком")))
