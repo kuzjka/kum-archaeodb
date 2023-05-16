@@ -93,9 +93,9 @@ Requests item parsing from a CSV format.
 
 |Parameter|Type|Description|
 |---|---|---|
-|**delimiter**|string|Delimiter char|
-|**hasHeaders**|boolean|Indicates if the content has a header row|
-|**content**|string|CSV content of the file|
+|**delimiter**|`TAB` \| `COMMA` \| `SEMICOLON`|Delimiter char|
+|**commaDecimalSeparators**|boolean|`true` if data has float numbers with commas as decimal separator char|
+|**data**|string|CSV content of the file|
 
 #### Response
 
@@ -108,7 +108,7 @@ Returns an array of ItemParsing objects
 |Field|Type|Description|
 |---|---|---|
 |**name**|string|Item name|
-|**pointNumber**|string|Point number (inventory list number)|
+|**number**|string|Point number (inventory list number)|
 |**location**|[Location](#location)|Item discovery location|
 |**hectare**|number|Hectare number (if autodetected)|
 |**dimensions**|string|Item dimensions, mm|
@@ -142,7 +142,7 @@ HTTP 200 (empty)
 
 #### Error response
 
-HTTP 400 if request body does not meet object schema specifications
+HTTP 400 if request body does not meet object schema specifications or item category does not exist
 HTTP 500 in case of server error
 
 |Field|Type|Description|
