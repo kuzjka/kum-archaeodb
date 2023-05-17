@@ -28,33 +28,45 @@ export class ItemListComponent implements OnInit {
   currentPage: number = 0;
   currentSort: string = 'pointNumber';
   currentOrder: string = 'asc';
+
   constructor(private service: ItemsService) {
   }
+
   @ViewChild(MatSort) sort?: MatSort;
+
   public handleFilter(category: string) {
-    if (this.selectedCategories.includes(category)) {
-      let index = this.selectedCategories.indexOf(category);
-      this.selectedCategories.splice(index);
-    } else {
+    if (this.selectedCategories.length == 0) {
       this.selectedCategories.push(category);
+    } else if (this.selectedCategories.length > 0) {
+
+      if (this.selectedCategories.includes(category)) {
+        let index = this.selectedCategories.indexOf(category);
+        this.selectedCategories.splice(index);
+      } else if (!this.selectedCategories.includes(category)) {
+        this.selectedCategories.push(category);
+      }
     }
     this.getItems(this.currentPage, this.pageSize, this.selectedCategories, this.currentSort, this.currentOrder);
   }
+
   public handleSort(sortState: Sort) {
     this.currentSort = sortState.active;
     this.currentOrder = sortState.direction;
     this.getItems(this.currentPage, this.pageSize, this.selectedCategories, this.currentSort, this.currentOrder);
   }
+
   public handlePage(e: any) {
     this.currentPage = e.pageIndex;
     this.pageSize = e.pageSize;
     this.getItems(this.currentPage, this.pageSize, this.selectedCategories, this.currentSort, this.currentOrder);
   }
+
   getCategories() {
     this.service.getCategoryNames().subscribe(data => {
       this.categories = data;
     })
   }
+
   getItems(page: number, size: number, categories: string[], sort: string, order: string) {
     this.service.getItems(page, size, categories, sort, order).subscribe(data => {
       this.items = data.content;
@@ -64,12 +76,14 @@ export class ItemListComponent implements OnInit {
       this.currentPage = 0;
     })
   }
+
   getPages() {
     this.pages = [];
     for (let i = 0; i < this.totalPages; i++) {
       this.pages.push(i);
     }
   }
+
   ngOnInit(): void {
     this.getCategories();
     this.getItems(this.currentPage, this.pageSize, this.selectedCategories, this.currentSort, this.currentOrder);

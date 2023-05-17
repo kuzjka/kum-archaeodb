@@ -4,62 +4,67 @@
 </div>
 
 <div>Всього знахідок: <b>{{ totalItems }}</b>
-  <mat-chip-listbox aria-label="Category selection" *ngFor="let category of categories">
-    <mat-chip-option (click)="handleFilter(category)">{{category}}</mat-chip-option>
-  </mat-chip-listbox>
-  <mat-paginator [length]="totalItems"
-                 [pageSize]="pageSize"
-                 [pageSizeOptions]="[2, 25, 100]"
-                 aria-label="Select page" (page)="handlePage($event)">
-  </mat-paginator>
-</div>
-<table mat-table [dataSource]="items" matSort (matSortChange)="handleSort($event)" multiTemplateDataRows>
-  <ng-container matColumnDef="pointNumber">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by pointNumber">Номер</th>
-    <td mat-cell *matCellDef="let item">{{ item.pointNumber }}</td>
-  </ng-container>
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">Назва</th>
-    <td mat-cell *matCellDef="let item">{{ item.name }}</td>
-  </ng-container>
-  <ng-container matColumnDef="category">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by category">Категорія</th>
-    <td mat-cell *matCellDef="let item">{{ item.category }}</td>
-  </ng-container>
-  <ng-container matColumnDef="dimensions">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by dimensions">Розміри</th>
-    <td mat-cell *matCellDef="let item">{{ item.dimensions }}</td>
-  </ng-container>
-  <ng-container matColumnDef="latitude">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by latitude">Широта</th>
-    <td mat-cell *matCellDef="let item">{{ item.location.latitude }}</td>
-  </ng-container>
-  <ng-container matColumnDef="longitude">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by longitude">Довгота</th>
-    <td mat-cell *matCellDef="let item">{{ item.location.longitude }}</td>
-  </ng-container>
-  <ng-container matColumnDef="expandedDetail">
-    <td mat-cell *matCellDef="let item" [attr.colspan]="columnsToDisplay.length">
-      <div class="item-details" [@tableExpand]="item.isExpanded ? 'expanded' : 'collapsed'">
-        <div class="item-details-column">
-          <p>Рік: {{ item.year }}</p>
-          <p>Гектар: {{ item.hectare }}</p>
-          <p>Глибина (см): {{ item.depth }}</p>
-          <p>Вага, г: {{ item.weight }}</p>
-          <p>Контекст: {{ item.context }}</p>
+  <div>
+    <mat-chip-listbox aria-label="Category selection" multiple>
+      <span *ngFor="let category of categories" multiple>
+      <mat-chip-option (click)="handleFilter(category)">{{category}}</mat-chip-option>
+    </span>
+    </mat-chip-listbox>
+  </div>
+  <div>
+    <mat-paginator [length]="totalItems"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="[2, 25, 100]"
+                   aria-label="Select page" (page)="handlePage($event)">
+    </mat-paginator>
+  </div>
+  <table mat-table [dataSource]="items" matSort (matSortChange)="handleSort($event)" multiTemplateDataRows>
+    <ng-container matColumnDef="pointNumber">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by pointNumber">Номер</th>
+      <td mat-cell *matCellDef="let item">{{ item.pointNumber }}</td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">Назва</th>
+      <td mat-cell *matCellDef="let item">{{ item.name }}</td>
+    </ng-container>
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by category">Категорія</th>
+      <td mat-cell *matCellDef="let item">{{ item.category }}</td>
+    </ng-container>
+    <ng-container matColumnDef="dimensions">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by dimensions">Розміри</th>
+      <td mat-cell *matCellDef="let item">{{ item.dimensions }}</td>
+    </ng-container>
+    <ng-container matColumnDef="latitude">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by latitude">Широта</th>
+      <td mat-cell *matCellDef="let item">{{ item.location.latitude }}</td>
+    </ng-container>
+    <ng-container matColumnDef="longitude">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by longitude">Довгота</th>
+      <td mat-cell *matCellDef="let item">{{ item.location.longitude }}</td>
+    </ng-container>
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let item" [attr.colspan]="columnsToDisplay.length">
+        <div class="item-details" [@tableExpand]="item.isExpanded ? 'expanded' : 'collapsed'">
+          <div class="item-details-column">
+            <p>Рік: {{ item.year }}</p>
+            <p>Гектар: {{ item.hectare }}</p>
+            <p>Глибина (см): {{ item.depth }}</p>
+            <p>Вага, г: {{ item.weight }}</p>
+            <p>Контекст: {{ item.context }}</p>
+          </div>
+          <div class="item-details-column">
+            <p>Матеріал: {{ item.material }}</p>
+            <p>Техніка: {{ item.technique }}</p>
+            <p>Стан: {{ item.condition }}</p>
+          </div>
         </div>
-        <div class="item-details-column">
-          <p>Матеріал: {{ item.material }}</p>
-          <p>Техніка: {{ item.technique }}</p>
-          <p>Стан: {{ item.condition }}</p>
-        </div>
-      </div>
-    </td>
+      </td>
 
-  </ng-container>
+    </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true;"></tr>
-  <tr mat-row *matRowDef="let row; columns: columnsToDisplay" (click)="row.isExpanded = !row.isExpanded"
-      class="item-row"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="expanded-detail-row"></tr>
-</table>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true;"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay" (click)="row.isExpanded = !row.isExpanded"
+        class="item-row"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="expanded-detail-row"></tr>
+  </table>
