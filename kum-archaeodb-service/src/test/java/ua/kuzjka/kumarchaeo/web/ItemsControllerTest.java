@@ -19,7 +19,6 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -62,6 +61,8 @@ public class ItemsControllerTest {
     @Test
     void getItemsTest() throws Exception {
         List<ItemDto> items = new ArrayList<>();
+        List<String> categories = new ArrayList<>();
+        categories.add("Кулі");
         PageDto pageDto = new PageDto();
         ItemDto itemDto1 = new ItemDto();
         itemDto1.setId(1);
@@ -83,12 +84,13 @@ public class ItemsControllerTest {
         pageDto.setContent(items);
         pageDto.setTotalCount(items.size());
         pageDto.setTotalPages(1);
-        given(itemsService.getItems(0, 25, "name", "ASC")).willReturn(pageDto);
+        given(itemsService.getItems(0, 25, categories, "name", "ASC")).willReturn(pageDto);
         this.mvc.perform(get("/api/items")
                         .param("page", "0")
                         .param("size", "25")
-                .param("sort", "name")
-                .param("order", "ASC"))
+                        .param("categories", "Кулі")
+                        .param("sort", "name")
+                        .param("order", "ASC"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].id", is(1)))
                 .andExpect(jsonPath("$.content[0].name", is("Куля свинцева з хвостиком")))

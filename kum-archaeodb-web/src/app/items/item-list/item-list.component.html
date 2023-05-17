@@ -3,15 +3,16 @@
   <button mat-raised-button>Експортувати</button>
 </div>
 
-<div>Всього знахідок: <b>{{ totalItems }}</b></div>
-<div><mat-paginator  [length]="totalItems"
-               [pageSize]="pageSize"
-               [pageSizeOptions]="[ 2, 25, 100]"
-               aria-label="Select page" (page)="handlePage($event)">
-</mat-paginator></div>
-
-
-<p></p>
+<div>Всього знахідок: <b>{{ totalItems }}</b>
+  <mat-chip-listbox aria-label="Category selection" *ngFor="let category of categories">
+    <mat-chip-option (click)="handleFilter(category)">{{category}}</mat-chip-option>
+  </mat-chip-listbox>
+  <mat-paginator [length]="totalItems"
+                 [pageSize]="pageSize"
+                 [pageSizeOptions]="[2, 25, 100]"
+                 aria-label="Select page" (page)="handlePage($event)">
+  </mat-paginator>
+</div>
 <table mat-table [dataSource]="items" matSort (matSortChange)="handleSort($event)" multiTemplateDataRows>
   <ng-container matColumnDef="pointNumber">
     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by pointNumber">Номер</th>

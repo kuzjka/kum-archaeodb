@@ -21,6 +21,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatListModule } from "@angular/material/list";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
+import {MatChipsModule} from "@angular/material/chips";
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import {MatSortModule} from "@angular/material/sort";
         MatStepperModule,
         MatTableModule,
         MatPaginatorModule,
-        MatSortModule
+        MatSortModule,
+        MatChipsModule
     ]
 })
 export class ItemsModule { }
