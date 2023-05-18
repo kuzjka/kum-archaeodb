@@ -25,10 +25,10 @@ public class ItemsController {
     @GetMapping("/items")
     public PageDto getItems(@RequestParam int page,
                             @RequestParam int size,
-                            @RequestParam(required = false) String categories,
-                            @RequestParam(required = false) String sort,
-                            @RequestParam(required = false) String order) {
-        return itemsService.getItems(page, size);
+                            @RequestParam List<String> categories,
+                            @RequestParam String sort,
+                            @RequestParam String order) {
+        return itemsService.getItems(page, size, categories, sort, order);
     }
 
     @GetMapping("/categoryNames")

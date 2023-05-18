@@ -3,6 +3,7 @@ package ua.kuzjka.kumarchaeo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ua.kuzjka.kumarchaeo.dto.*;
 import ua.kuzjka.kumarchaeo.model.Category;
@@ -14,6 +15,7 @@ import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,9 +38,7 @@ public class ItemsService {
     /**
      * Parses CSV string and returns list of items to confirm
      *
-     * @param dto
-     * @param decimal
-     * @return list of items
+     * @param dto * @return list of items
      * @throws IOException
      */
     public List<ItemParsingDto> parse(ItemParsingRequestDto dto) throws IOException {
@@ -76,15 +76,42 @@ public class ItemsService {
     }
 
     /**
-     * Returns page of items
+     * Gets list of items according to parameters
      *
      * @param page
      * @param size
-     * @return page of items
+     * @param categories
+     * @param sort
+     * @param order
+     * @return List of items
      */
-    public PageDto getItems(int page, int size) {
-        Page<Item> itemPage;
-        itemPage = itemRepository.findAll(PageRequest.of(page, size));
+    public PageDto getItems(int page, int size, List<String> categories, String sort, String order) {
+        String sort2 = null;
+        if (order.equals("")) {
+            order = "asc";
+        }
+        if (sort.equals("pointNumber")) {
+            sort = "pointNumber.number";
+            sort2 = "pointNumber.subNumber";
+        } else if (sort.equals("category")) {
+            sort = "category.name";
+        } else if (sort.equals("latitude")) {
+            sort = "location.latitude";
+        } else if (sort.equals("longitude")) {
+            sort = "location.longitude";
+        }
+
+        Page<Item> itemPage = null;
+
+        if (categories.size() == 0) {
+            itemPage = itemRepository.findAll(PageRequest.of(page, size, Sort.Direction.fromString(order), sort));
+        } else if (sort2 != null) {
+            itemPage = itemRepository.findAllByCategoryNameIn(PageRequest.of(page, size, Sort.Direction.fromString(order),
+                    sort, sort2), categories);
+        } else if (sort2 == null) {
+            itemPage = itemRepository.findAllByCategoryNameIn(PageRequest.of(page, size, Sort.Direction.fromString(order),
+                    sort), categories);
+        }
         List<ItemDto> items = itemPage.stream().map(ItemDto::new).collect(Collectors.toList());
         PageDto dto = new PageDto();
         dto.setContent(items);
@@ -129,8 +156,8 @@ public class ItemsService {
     /**
      * Saves new category or updates existing.
      *
-     * @param categoryDto   Category to add
-     * @return              ID of category or {@code -1} if the category is not found
+     * @param categoryDto Category to add
+     * @return ID of category or {@code -1} if the category is not found
      */
     public int saveCategory(CategoryDto categoryDto) {
         Category category;
@@ -152,8 +179,8 @@ public class ItemsService {
     /**
      * Deletes a category.
      *
-     * @param id    Category ID
-     * @return      Deleted category ID or {@code -1} if the category was not found
+     * @param id Category ID
+     * @return Deleted category ID or {@code -1} if the category was not found
      */
     public int deleteCategory(int id) {
         Optional<Category> category = categoryRepository.findById(id);

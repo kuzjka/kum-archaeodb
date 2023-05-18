@@ -7,9 +7,13 @@ export class ItemsRequest {
   sort: string | undefined;
   order: 'asc' | 'desc' | undefined;
 
-  constructor(page: number, size: number) {
+
+  constructor(page: number, size: number, categories: string | undefined, sort: string | undefined, order: "asc" | "desc" | undefined) {
     this.page = page;
     this.size = size;
+    this.categories = categories;
+    this.sort = sort;
+    this.order = order;
   }
 }
 

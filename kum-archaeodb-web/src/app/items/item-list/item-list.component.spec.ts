@@ -7,6 +7,9 @@ import { MatButtonModule } from "@angular/material/button";
 import { of } from "rxjs";
 import { Bullet, Item } from "../items.model";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSortModule} from "@angular/material/sort";
+import {MatChipsModule} from "@angular/material/chips";
 
 describe('ItemListComponent', () => {
   let component: ItemListComponent;
@@ -70,19 +73,23 @@ describe('ItemListComponent', () => {
   ];
 
   beforeEach(async () => {
-    itemsServiceSpy = jasmine.createSpyObj('ItemsService', ['getItems'])
+    itemsServiceSpy = jasmine.createSpyObj('ItemsService', ['getItems', 'getCategoryNames'])
     itemsServiceSpy.getItems.and.returnValue(of({
       totalPages: 2,
       totalCount: 4,
       content: TEST_DATA
     }));
+    itemsServiceSpy.getCategoryNames.and.returnValue(of(['Category 1', 'Category 2']));
 
     await TestBed.configureTestingModule({
       declarations: [ ItemListComponent ],
       imports: [
         MatButtonModule,
         MatTableModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatChipsModule
       ],
       providers: [
         { provide: ItemsService, useValue: itemsServiceSpy }

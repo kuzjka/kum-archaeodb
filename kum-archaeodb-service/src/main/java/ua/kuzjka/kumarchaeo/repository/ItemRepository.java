@@ -9,6 +9,7 @@ import ua.kuzjka.kumarchaeo.dto.ItemDto;
 import ua.kuzjka.kumarchaeo.model.Item;
 import ua.kuzjka.kumarchaeo.model.PointNumber;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,5 +20,5 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
      */
     Optional<Item> findByPointNumber(PointNumber pointNumber);
 
-    Page<Item> findAll(Pageable pageable);
+    Page<Item> findAllByCategoryNameIn(Pageable pageable, List<String> categories);
 }
