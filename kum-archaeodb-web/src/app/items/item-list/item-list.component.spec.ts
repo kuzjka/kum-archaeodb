@@ -79,6 +79,7 @@ describe('ItemListComponent', () => {
       totalCount: 4,
       content: TEST_DATA
     }));
+    itemsServiceSpy.getCategoryNames.and.returnValue(of(['Category 1', 'Category 2']));
 
     await TestBed.configureTestingModule({
       declarations: [ ItemListComponent ],
