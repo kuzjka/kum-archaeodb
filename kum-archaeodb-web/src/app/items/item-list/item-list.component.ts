@@ -41,7 +41,7 @@ export class ItemListComponent implements OnInit {
 
       if (this.selectedCategories.includes(category)) {
         let index = this.selectedCategories.indexOf(category);
-        this.selectedCategories.splice(index);
+        this.selectedCategories.splice(index, 1);
       } else if (!this.selectedCategories.includes(category)) {
         this.selectedCategories.push(category);
       }

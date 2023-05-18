@@ -86,11 +86,13 @@ public class ItemsService {
      * @return List of items
      */
     public PageDto getItems(int page, int size, List<String> categories, String sort, String order) {
+        String sort2 = null;
         if (order.equals("")) {
             order = "asc";
         }
         if (sort.equals("pointNumber")) {
             sort = "pointNumber.number";
+            sort2 = "pointNumber.subNumber";
         } else if (sort.equals("category")) {
             sort = "category.name";
         } else if (sort.equals("latitude")) {
@@ -99,10 +101,16 @@ public class ItemsService {
             sort = "location.longitude";
         }
 
-        Page<Item> itemPage;
-        itemPage = itemRepository.findAllByCategoryNameIn(PageRequest.of(page, size, Sort.Direction.fromString(order), sort), categories);
-        if (categories.isEmpty()) {
+        Page<Item> itemPage = null;
+
+        if (categories.size() == 0) {
             itemPage = itemRepository.findAll(PageRequest.of(page, size, Sort.Direction.fromString(order), sort));
+        } else if (sort2 != null) {
+            itemPage = itemRepository.findAllByCategoryNameIn(PageRequest.of(page, size, Sort.Direction.fromString(order),
+                    sort, sort2), categories);
+        } else if (sort2 == null) {
+            itemPage = itemRepository.findAllByCategoryNameIn(PageRequest.of(page, size, Sort.Direction.fromString(order),
+                    sort), categories);
         }
         List<ItemDto> items = itemPage.stream().map(ItemDto::new).collect(Collectors.toList());
         PageDto dto = new PageDto();
