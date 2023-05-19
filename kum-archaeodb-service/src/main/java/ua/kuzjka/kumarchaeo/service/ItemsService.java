@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ua.kuzjka.kumarchaeo.dto.*;
+import ua.kuzjka.kumarchaeo.exception.NoSuchCategoryException;
+import ua.kuzjka.kumarchaeo.exception.SuchCategoryExistsException;
 import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Delimiter;
 import ua.kuzjka.kumarchaeo.model.Item;
@@ -15,7 +17,6 @@ import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -166,13 +167,17 @@ public class ItemsService {
         } else {
             Optional<Category> optional = categoryRepository.findById(categoryDto.getId());
             if (optional.isEmpty()) {
-                return -1;
+                throw new NoSuchCategoryException("Category with id: " + categoryDto.getId() + " does not exists");
             } else {
                 category = optional.get();
             }
         }
         category.setName(categoryDto.getName());
         category.setFilters(categoryDto.getFilters());
+        Optional<Category> exists = categoryRepository.findByName(categoryDto.getName());
+        if (exists.isPresent()) {
+            throw new SuchCategoryExistsException("Category with name '" + categoryDto.getName() + "' already exists");
+        }
         return categoryRepository.save(category).getId();
     }
 

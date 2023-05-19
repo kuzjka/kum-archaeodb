@@ -36,8 +36,13 @@ export class CategoryListComponent implements OnInit {
       if (category) {
         console.log("Add category: \n" + JSON.stringify(category, null, 2));
         this.service.addCategory(category).subscribe(data => {
-          this.getCategories();
-        })
+            this.getCategories()
+          },
+          error => {
+            if (error.status == 400) {
+              alert('Категорія з таким ім\'ям вже існує')
+            }
+          })
       }
     })
   }
@@ -55,6 +60,7 @@ export class CategoryListComponent implements OnInit {
         this.service.editCategory(category).subscribe(data => {
           this.service.getCategories();
         })
+
       console.log("Update category: \n" + JSON.stringify(category, null, 2));
     })
   }

@@ -9,6 +9,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.kuzjka.kumarchaeo.dto.*;
+import ua.kuzjka.kumarchaeo.exception.NoSuchCategoryException;
+import ua.kuzjka.kumarchaeo.exception.SuchCategoryExistsException;
 import ua.kuzjka.kumarchaeo.model.Delimiter;
 import ua.kuzjka.kumarchaeo.model.Location;
 import ua.kuzjka.kumarchaeo.model.PointNumber;
@@ -190,6 +192,23 @@ public class ItemsControllerTest {
     }
 
     @Test
+    void addExistingCategoryTest() throws Exception {
+        String json = "{\"id\":null, \"name\":\"Обладунки\", \"filters\":[\"Обладунок\"]}";
+        List<String> filters = new ArrayList<>();
+        filters.add("Обладунок");
+        CategoryDto dto = new CategoryDto(null, "Обладунки", filters);
+        given(this.itemsService.saveCategory(dto)).willThrow(SuchCategoryExistsException.class);
+
+        this.mvc.perform(post("/api/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest());
+
+
+    }
+
+    @Test
     void updateCategoryTest() throws Exception {
         String json = "{\"id\":1, \"name\":\"Обладунки\", \"filters\":[\"Обладунок\"]}";
         List<String> filters = new ArrayList<>();
@@ -209,7 +228,7 @@ public class ItemsControllerTest {
         List<String> filters = new ArrayList<>();
         filters.add("Обладунок");
         CategoryDto dto = new CategoryDto(4, "Обладунки", filters);
-        given(this.itemsService.saveCategory(dto)).willReturn(-1);
+        given(this.itemsService.saveCategory(dto)).willThrow(NoSuchCategoryException.class);
         this.mvc.perform(put("/api/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
