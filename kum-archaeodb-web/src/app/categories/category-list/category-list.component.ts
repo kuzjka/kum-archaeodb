@@ -4,6 +4,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {CategoryEditComponent} from "./category-edit/category-edit.component";
 import {CategoryDeleteDialogComponent} from "./category-delete-dialog/category-delete-dialog.component";
 import {ItemsService} from "../../items.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
@@ -15,7 +16,7 @@ export class CategoryListComponent implements OnInit {
   categories!: Category  [];
   tableColumns = ['name', 'filters', 'actions'];
 
-  constructor(public dialog: MatDialog, public service: ItemsService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar, public service: ItemsService) {
   }
 
   getCategories() {
@@ -40,7 +41,7 @@ export class CategoryListComponent implements OnInit {
           },
           error => {
             if (error.status == 400) {
-              alert('Категорія з таким ім\'ям вже існує')
+              this.snackBar.open('Категорія з таким ім\'ям вже існує', 'Ок')
             }
           })
       }

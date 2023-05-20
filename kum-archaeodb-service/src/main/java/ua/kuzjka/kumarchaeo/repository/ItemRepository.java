@@ -19,6 +19,6 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
      * @return  Optional item
      */
     Optional<Item> findByPointNumber(PointNumber pointNumber);
-
+    List<Item> findAllByCategoryId(int id);
     Page<Item> findAllByCategoryNameIn(Pageable pageable, List<String> categories);
 }

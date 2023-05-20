@@ -189,9 +189,12 @@ public class ItemsService {
      */
     public int deleteCategory(int id) {
         Optional<Category> category = categoryRepository.findById(id);
-        if (category.isEmpty()) {
+        if (category.isEmpty() || category.get().getName().equals("Інше")) {
             return -1;
         }
+        List<Item> items = itemRepository.findAllByCategoryId(id);
+        Optional<Category> other = categoryRepository.findByName("Інше");
+        items.forEach(x -> x.setCategory(other.get()));
         categoryRepository.delete(category.get());
         return id;
     }
