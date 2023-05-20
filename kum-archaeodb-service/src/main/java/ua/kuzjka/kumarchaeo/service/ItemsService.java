@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ua.kuzjka.kumarchaeo.dto.*;
 import ua.kuzjka.kumarchaeo.exception.NoSuchCategoryException;
 import ua.kuzjka.kumarchaeo.exception.SuchCategoryExistsException;
+import ua.kuzjka.kumarchaeo.model.Bullet;
 import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Delimiter;
 import ua.kuzjka.kumarchaeo.model.Item;
@@ -61,18 +62,38 @@ public class ItemsService {
      */
     public void confirmParsed(List<ItemParsingDto> dtoList) {
         for (ItemParsingDto dto : dtoList) {
-            Item item = new Item();
-            item.setName(dto.getName());
-            item.setPointNumber(dto.getNumber());
+
             Category category = categoryRepository.findByName(dto.getCategory()).get();
-            item.setCategory(category);
-            item.setLocation(dto.getLocation());
-            item.setDimensions(dto.getDimensions());
-            item.setHectare(dto.getHectare());
-            item.setGpsPoint(dto.getGpsPoint());
-            item.setRemarks(dto.getRemarks());
-            item.setWeight(dto.getWeight());
-            itemRepository.save(item);
+            if (dto.getCategory().equals("Кулі")) {
+                Bullet bullet = new Bullet();
+                bullet.setName(dto.getName());
+                bullet.setPointNumber(dto.getNumber());
+                bullet.setCategory(category);
+                bullet.setLocation(dto.getLocation());
+                bullet.setDimensions(dto.getDimensions());
+                bullet.setHectare(dto.getHectare());
+                bullet.setGpsPoint(dto.getGpsPoint());
+                bullet.setRemarks(dto.getRemarks());
+                bullet.setWeight(dto.getWeight());
+                if (dto.getCaliber() != null) {
+                    bullet.setCaliber(dto.getCaliber());
+                }
+                bullet.setDeformed(dto.getDeformation());
+                itemRepository.save(bullet);
+
+            } else {
+                Item item = new Item();
+                item.setName(dto.getName());
+                item.setPointNumber(dto.getNumber());
+                item.setCategory(category);
+                item.setLocation(dto.getLocation());
+                item.setDimensions(dto.getDimensions());
+                item.setHectare(dto.getHectare());
+                item.setGpsPoint(dto.getGpsPoint());
+                item.setRemarks(dto.getRemarks());
+                item.setWeight(dto.getWeight());
+                itemRepository.save(item);
+            }
         }
     }
 
