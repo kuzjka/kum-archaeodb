@@ -41,7 +41,9 @@ export class CategoryListComponent implements OnInit {
           },
           error => {
             if (error.status == 400) {
-              this.snackBar.open('Категорія з таким ім\'ям вже існує', 'Ок')
+              this.snackBar.open('Категорія з таким ім\'ям вже існує', 'Ок',{
+                duration: 3000
+              })
             }
           })
       }

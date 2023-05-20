@@ -175,7 +175,7 @@ public class ItemsService {
         category.setName(categoryDto.getName());
         category.setFilters(categoryDto.getFilters());
         Optional<Category> exists = categoryRepository.findByName(categoryDto.getName());
-        if (exists.isPresent()) {
+        if (exists.isPresent() && categoryDto.getId() == null) {
             throw new SuchCategoryExistsException("Category with name '" + categoryDto.getName() + "' already exists");
         }
         return categoryRepository.save(category).getId();
