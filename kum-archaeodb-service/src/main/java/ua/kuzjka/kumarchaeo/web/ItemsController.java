@@ -1,12 +1,11 @@
 package ua.kuzjka.kumarchaeo.web;
 
-
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.kuzjka.kumarchaeo.dto.*;
+import ua.kuzjka.kumarchaeo.export.ItemExportService;
+import ua.kuzjka.kumarchaeo.export.ItemsExportException;
 import ua.kuzjka.kumarchaeo.service.ItemsService;
 
 import java.io.IOException;
@@ -17,9 +16,11 @@ import java.util.List;
 @RequestMapping("/api")
 public class ItemsController {
     private ItemsService itemsService;
+    private ItemExportService itemExportService;
 
-    public ItemsController(ItemsService itemsService) {
+    public ItemsController(ItemsService itemsService, ItemExportService itemExportService) {
         this.itemsService = itemsService;
+        this.itemExportService = itemExportService;
     }
 
     @GetMapping("/items")
@@ -56,6 +57,25 @@ public class ItemsController {
         return itemsService.confirmParsed(dtoList);
     }
 
+    @PostMapping("/exportItems")
+    public byte[] exportItems(@RequestBody ItemExportRequest request) {
+        List<Integer> ids = request.getIds();
+        if (ids != null && ids.isEmpty()) ids = null;
+
+        List<String> categories = request.getCategories();
+        if (categories != null && categories.isEmpty()) categories = null;
+
+        return itemExportService.exportItems(ids, categories);
+    }
+
+    @PostMapping("/exportBullets")
+    public byte[] exportBullets(@RequestBody BulletExportRequest request) {
+        List<Integer> ids = request.getIds();
+        if (ids != null && ids.isEmpty()) ids = null;
+
+        return itemExportService.exportBullets(ids);
+    }
+
     @PutMapping("/categories")
     public void updateCategory(@RequestBody CategoryDto dto) {
 
@@ -71,5 +91,10 @@ public class ItemsController {
         } else {
             return new ResponseEntity(HttpStatus.OK);
         }
+    }
+
+    @ExceptionHandler(ItemsExportException.class)
+    public ResponseEntity<ErrorResponseDto> handleItemExportException(ItemsExportException e) {
+        return new ResponseEntity<>(new ErrorResponseDto(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import ua.kuzjka.kumarchaeo.dto.*;
 import ua.kuzjka.kumarchaeo.exception.NoSuchCategoryException;
 import ua.kuzjka.kumarchaeo.exception.SuchCategoryExistsException;
+import ua.kuzjka.kumarchaeo.export.ItemExportService;
+import ua.kuzjka.kumarchaeo.export.ItemsExportException;
 import ua.kuzjka.kumarchaeo.model.Delimiter;
 import ua.kuzjka.kumarchaeo.model.Location;
 import ua.kuzjka.kumarchaeo.model.PointNumber;
@@ -20,20 +22,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @WebMvcTest(ItemsController.class)
 public class ItemsControllerTest {
     @Autowired
     private MockMvc mvc;
+
     @MockBean
     private ItemsService itemsService;
+
+    @MockBean
+    private ItemExportService itemExportService;
 
     @Test
     void getCategoriesTest() throws Exception {
@@ -248,5 +253,147 @@ public class ItemsControllerTest {
         given(this.itemsService.deleteCategory(4)).willReturn(-1);
         this.mvc.perform(delete("/api/categories/4"))
                 .andExpect(status().is(404));
+    }
+
+    @Test
+    void testExportItemsFiltered() throws Exception {
+        given(itemExportService.exportItems(anyList(), anyList())).willReturn(new byte[]{0, 1, 2, 3});
+
+        this.mvc.perform(post("/api/exportItems")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{ \"ids\": [1, 2, 3], " +
+                        "\"categories\": [\"Cat 1\", \"Cat 2\"]}"))
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(new byte[]{0, 1, 2, 3}));
+
+        verify(itemExportService).exportItems(List.of(1, 2, 3), List.of("Cat 1", "Cat 2"));
+    }
+
+    @Test
+    void testExportItemsIdsEmpty() throws Exception {
+        given(itemExportService.exportItems(any(), any())).willReturn(new byte[]{1, 2, 3, 4});
+
+        this.mvc.perform(post("/api/exportItems")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"ids\": [], " +
+                                "\"categories\": [\"Cat 1\", \"Cat 2\"]}"))
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(new byte[]{1, 2, 3, 4}));
+
+        verify(itemExportService).exportItems(isNull(), eq(List.of("Cat 1", "Cat 2")));
+    }
+
+    @Test
+    void testExportItemsIdsAbsent() throws Exception {
+        given(itemExportService.exportItems(any(), any())).willReturn(new byte[]{2, 3, 4, 5});
+
+        this.mvc.perform(post("/api/exportItems")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"categories\": [\"Cat 1\", \"Cat 2\"] }"))
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(new byte[]{2, 3, 4, 5}));
+
+        verify(itemExportService).exportItems(isNull(), eq(List.of("Cat 1", "Cat 2")));
+    }
+
+    @Test
+    void testExportItemsCategoriesEmpty() throws Exception {
+        given(itemExportService.exportItems(any(), any())).willReturn(new byte[]{3, 4, 5, 6});
+
+        this.mvc.perform(post("/api/exportItems")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"ids\": [1, 2, 3], " +
+                                "\"categories\": []}"))
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(new byte[]{3, 4, 5, 6}));
+
+        verify(itemExportService).exportItems(eq(List.of(1, 2, 3)), isNull());
+    }
+
+    @Test
+    void testExportItemsCategoriesAbsent() throws Exception {
+        given(itemExportService.exportItems(any(), any())).willReturn(new byte[]{4, 5, 6, 7});
+
+        this.mvc.perform(post("/api/exportItems")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"ids\": [1, 2, 3] }"))
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(new byte[]{4, 5, 6, 7}));
+
+        verify(itemExportService).exportItems(eq(List.of(1, 2, 3)), isNull());
+    }
+
+    @Test
+    void testExportItemsEmptyFilteringObject() throws Exception {
+        given(itemExportService.exportItems(any(), any())).willReturn(new byte[]{5, 6, 7, 8});
+
+        this.mvc.perform(post("/api/exportItems")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(new byte[]{5, 6, 7, 8}));
+
+        verify(itemExportService).exportItems(isNull(), isNull());
+    }
+
+    @Test
+    void testExportItemsError() throws Exception {
+        given(itemExportService.exportItems(any(), any()))
+                .willThrow(new ItemsExportException(new RuntimeException("Something went wrong")));
+
+        this.mvc.perform(post("/api/exportItems")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    void testExportBulletsFiltered() throws Exception {
+        given(itemExportService.exportBullets(any())).willReturn(new byte[]{4, 3, 2, 1});
+
+        this.mvc.perform(post("/api/exportBullets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"ids\": [2, 3, 4]}"))
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(new byte[]{4, 3, 2, 1}));
+
+        verify(itemExportService).exportBullets(List.of(2, 3, 4));
+    }
+
+    @Test
+    void testExportBulletsIdsEmpty() throws Exception {
+        given(itemExportService.exportBullets(any())).willReturn(new byte[]{5, 4, 3, 2});
+
+        this.mvc.perform(post("/api/exportBullets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"ids\": []}"))
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(new byte[]{5, 4, 3, 2}));
+
+        verify(itemExportService).exportBullets(isNull());
+    }
+
+    @Test
+    void testExportBulletsIdsAbsent() throws Exception {
+        given(itemExportService.exportBullets(any())).willReturn(new byte[]{6, 5, 4, 3});
+
+        this.mvc.perform(post("/api/exportBullets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(new byte[]{6, 5, 4, 3}));
+
+        verify(itemExportService).exportBullets(isNull());
+    }
+
+    @Test
+    void testExportBulletsError() throws Exception {
+        given(itemExportService.exportBullets(any()))
+                .willThrow(new ItemsExportException(new RuntimeException("Something went wrong")));
+
+        this.mvc.perform(post("/api/exportBullets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isInternalServerError());
     }
 }
