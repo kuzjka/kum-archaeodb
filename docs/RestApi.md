@@ -149,6 +149,74 @@ HTTP 500 in case of server error
 |---|---|---|
 |**message**|string|Error message|
 
+### POST /api/exportItems
+
+Exports items to CSV file.
+Filters by item IDs and categories may be included. Non-existing IDs or categories will be ignored.
+Resulting items are an intersection of both filtered sets.
+
+<details>
+<summary>Example</summary>
+
+* Available items
+  
+  | ID | Category     | Name       |
+  |----|--------------|------------|
+  | 1  | Tools        | Axe        |
+  | 2  | Ammunition   | Pistol     |
+  | 3  | Coins        | Solid Coin |
+
+* Request
+  ```json
+  {
+    "ids": [1, 3, 5],
+    "categories": ["Tools", "Ammunition", "Mortars"]
+  }
+  ```
+  
+* Response
+  
+  | ID | Category | Name |
+  |----|----------|------|
+  | 1  | Tools    | Axe  |
+
+</details>
+
+#### Request
+
+**Content-Type: application/json**
+
+| Field          | Type            | Description                                                                                        |
+|----------------|-----------------|----------------------------------------------------------------------------------------------------|
+| **ids**        | Array<number>   | Item IDs to export. Optional. If absent or empty - exports all items                               |
+| **categories** | Array<string>   | Comma-separated list of categories to filter. Optional. If absent or empty - no filtering is made. |
+
+#### Response
+
+**Content-Type: application/octet-stream**
+
+CSV file with comma as separator value with header row, describing each column.
+
+
+### POST /api/exportBullets
+
+Exports bullet items to CSV file.
+Filtering by IDs may be added. Non-existing IDs are ignored.
+
+### Request
+
+**Content-Type: application/json**
+
+| Field   | Type          | Description                                                                   |
+|---------|---------------|-------------------------------------------------------------------------------|
+| **ids** | Array<number> | Bullet IDs to export. Optional. If absent or empty - all bullets are exported |
+
+#### Response
+
+**Content-Type: application/octet-stream**
+
+CSV file with comma as separator value with header row, describing each column. Additional bullet-specific columns are present.
+
 ## Categories
 
 ### GET /api/categoryNames
