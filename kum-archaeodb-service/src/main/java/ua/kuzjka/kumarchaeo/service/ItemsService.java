@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ua.kuzjka.kumarchaeo.dto.*;
+import ua.kuzjka.kumarchaeo.exception.NoSuchCategoryException;
+import ua.kuzjka.kumarchaeo.exception.SuchCategoryExistsException;
 import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Delimiter;
 import ua.kuzjka.kumarchaeo.model.Item;
@@ -15,7 +17,6 @@ import ua.kuzjka.kumarchaeo.repository.ItemRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -154,10 +155,12 @@ public class ItemsService {
     }
 
     /**
-     * Saves new category or updates existing.
+     * Saves new category or updates existing
      *
-     * @param categoryDto Category to add
-     * @return ID of category or {@code -1} if the category is not found
+     * @param categoryDto Category to add or update
+     * @return id of new or updating category
+     * @throws NoSuchCategoryException if updating not existing category
+     * @throws SuchCategoryExistsException if category with such name already exists
      */
     public int saveCategory(CategoryDto categoryDto) {
         Category category;
@@ -166,13 +169,17 @@ public class ItemsService {
         } else {
             Optional<Category> optional = categoryRepository.findById(categoryDto.getId());
             if (optional.isEmpty()) {
-                return -1;
+                throw new NoSuchCategoryException("Category with id: " + categoryDto.getId() + " does not exists");
             } else {
                 category = optional.get();
             }
         }
         category.setName(categoryDto.getName());
         category.setFilters(categoryDto.getFilters());
+        Optional<Category> exists = categoryRepository.findByName(categoryDto.getName());
+        if (exists.isPresent() && categoryDto.getId() == null) {
+            throw new SuchCategoryExistsException("Category with name '" + categoryDto.getName() + "' already exists");
+        }
         return categoryRepository.save(category).getId();
     }
 
@@ -184,9 +191,12 @@ public class ItemsService {
      */
     public int deleteCategory(int id) {
         Optional<Category> category = categoryRepository.findById(id);
-        if (category.isEmpty()) {
+        if (category.isEmpty() || category.get().getName().equals("Інше")) {
             return -1;
         }
+        List<Item> items = itemRepository.findAllByCategoryId(id);
+        Optional<Category> other = categoryRepository.findByName("Інше");
+        items.forEach(x -> x.setCategory(other.get()));
         categoryRepository.delete(category.get());
         return id;
     }

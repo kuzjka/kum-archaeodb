@@ -6,6 +6,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.stubbing.Answer;
 import ua.kuzjka.kumarchaeo.dto.CategoryDto;
 import ua.kuzjka.kumarchaeo.dto.ItemDto;
+import ua.kuzjka.kumarchaeo.exception.NoSuchCategoryException;
 import ua.kuzjka.kumarchaeo.model.Category;
 import ua.kuzjka.kumarchaeo.model.Item;
 import ua.kuzjka.kumarchaeo.model.Location;
@@ -89,7 +90,7 @@ public class ItemsServiceTest {
         assertEquals(123, id);
         verify(categoryRepository).save(argThat(cat ->
                 cat.getName().equals("New Category") &&
-                cat.getFilters().containsAll(List.of("Filter1", "Filter2"))));
+                        cat.getFilters().containsAll(List.of("Filter1", "Filter2"))));
     }
 
     @Test
@@ -106,16 +107,16 @@ public class ItemsServiceTest {
 
         verify(categoryRepository).save(argThat(c ->
                 c.getId() == 234 &&
-                "New Name".equals(c.getName()) &&
-                c.getFilters().containsAll(List.of("New Filter1", "New Filter2"))));
+                        "New Name".equals(c.getName()) &&
+                        c.getFilters().containsAll(List.of("New Filter1", "New Filter2"))));
     }
 
     @Test
     public void testUpdateNonExistingCategory() {
-       when(categoryRepository.findById(anyInt())).thenReturn(Optional.empty());
+        when(categoryRepository.findById(anyInt())).thenReturn(Optional.empty());
 
-       CategoryDto dto = new CategoryDto(235, "New Name", List.of("Filter"));
-       assertEquals(-1, service.saveCategory(dto));
+        CategoryDto dto = new CategoryDto(235, "New Name", List.of("Filter"));
+        assertThrows(NoSuchCategoryException.class, () -> service.saveCategory(dto));
     }
 
     @Test

@@ -2,6 +2,7 @@
   <button mat-raised-button (click)="addCategory()">Додати</button>
 </div>
 <div>Всього категорій: {{ categories.length }}</div>
+
 <table mat-table [dataSource]="categories">
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Назва</th>

@@ -26,7 +26,6 @@ export class ItemsService {
   }
 
   addCategory(category: Category): Observable<any> {
-    let id = category.id;
     let name = category.name;
     let filters = category.filters;
     let data = {

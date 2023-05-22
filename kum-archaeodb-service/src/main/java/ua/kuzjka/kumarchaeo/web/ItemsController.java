@@ -57,12 +57,10 @@ public class ItemsController {
     }
 
     @PutMapping("/categories")
-    public ResponseEntity updateCategory(@RequestBody CategoryDto dto) {
-        int code = itemsService.saveCategory(dto);
-        if (code == -1) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity(HttpStatus.OK);
+    public void updateCategory(@RequestBody CategoryDto dto) {
+
+        itemsService.saveCategory(dto);
+
     }
 
     @DeleteMapping("/categories/{id}")

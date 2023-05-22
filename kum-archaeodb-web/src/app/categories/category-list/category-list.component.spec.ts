@@ -8,6 +8,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
 import { MatDialog } from "@angular/material/dialog";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 describe('CategoryListComponent', () => {
   let component: CategoryListComponent;
@@ -45,7 +46,8 @@ describe('CategoryListComponent', () => {
       imports: [
         MatButtonModule,
         MatIconModule,
-        MatTableModule
+        MatTableModule,
+        MatSnackBarModule
       ],
       providers: [
         { provide: ItemsService, useValue: itemsServiceSpy },
