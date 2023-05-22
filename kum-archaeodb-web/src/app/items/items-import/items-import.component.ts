@@ -68,13 +68,13 @@ export class ItemsImportComponent implements OnInit {
       this.delimiterField.value,
       this.commaDecimalSeparatorsField.value))
       .subscribe(items => {
-      this.parsedItems = items;
-      this.overwriteField.setValue(false);
-      this.parsedItemsFiltered = items.filter(i => !i.numberExists);
-      this.duplicates = items.filter(i => i.numberExists);
-      this.parsedItemControls = this.createFormControls(this.parsedItemsFiltered);
-      this.loading = false;
-    });
+        this.parsedItems = items;
+        this.overwriteField.setValue(false);
+        this.parsedItemsFiltered = items.filter(i => !i.numberExists);
+        this.duplicates = items.filter(i => i.numberExists);
+        this.parsedItemControls = this.createFormControls(this.parsedItemsFiltered);
+        this.loading = false;
+      });
   }
 
   onOverwriteChanged(): void {
@@ -86,7 +86,7 @@ export class ItemsImportComponent implements OnInit {
   save(): void {
     this.service.addParsed(this.parsedItems).subscribe(data => {
       const count = this.parsedItemsFiltered.length;
-      this.snackBar.open(`Додано ${count} ${this.makePluralItems(count)}`, undefined, {duration: 3000})
+      this.snackBar.open(`Додано ${data} ${this.makePluralItems(data)}`, undefined, {duration: 3000})
       this.router.navigate(['items'])
       console.log("Saving data:\n" + JSON.stringify(this.parsedItemsFiltered, null, 2));
     })
