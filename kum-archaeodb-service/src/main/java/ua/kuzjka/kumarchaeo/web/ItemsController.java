@@ -52,8 +52,8 @@ public class ItemsController {
     }
 
     @PostMapping("/items/addParsed")
-    public void addParsed(@RequestBody List<ItemParsingDto> dtoList) throws IOException {
-        itemsService.confirmParsed(dtoList);
+    public int addParsed(@RequestBody List<ItemParsingDto> dtoList) throws IOException {
+        return itemsService.confirmParsed(dtoList);
     }
 
     @PutMapping("/categories")
