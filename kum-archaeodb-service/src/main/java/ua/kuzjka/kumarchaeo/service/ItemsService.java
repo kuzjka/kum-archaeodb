@@ -58,11 +58,13 @@ public class ItemsService {
     /**
      * Saves parsed items after confirmation
      *
-     * @param dtoList
+     * @param dtoList list of parsed items
+     * @return quantity of added parsed items
      */
-    public void confirmParsed(List<ItemParsingDto> dtoList) {
+    public int confirmParsed(List<ItemParsingDto> dtoList) {
+        int count = 0;
         for (ItemParsingDto dto : dtoList) {
-
+            count++;
             Category category = categoryRepository.findByName(dto.getCategory()).get();
             if (dto.getCategory().equals("Кулі")) {
                 Bullet bullet = new Bullet();
@@ -95,6 +97,7 @@ public class ItemsService {
                 itemRepository.save(item);
             }
         }
+        return count;
     }
 
     /**
@@ -180,7 +183,7 @@ public class ItemsService {
      *
      * @param categoryDto Category to add or update
      * @return id of new or updating category
-     * @throws NoSuchCategoryException if updating not existing category
+     * @throws NoSuchCategoryException     if updating not existing category
      * @throws SuchCategoryExistsException if category with such name already exists
      */
     public int saveCategory(CategoryDto categoryDto) {

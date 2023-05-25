@@ -19,8 +19,7 @@ import ua.kuzjka.kumarchaeo.service.ItemsService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -167,11 +166,12 @@ public class ItemsControllerTest {
         items.add(item2);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(items);
+        given(itemsService.confirmParsed(anyList())).willReturn(2);
         this.mvc.perform(post("/api/items/addParsed")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isOk());
-        verify(itemsService).confirmParsed(anyList());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", is(2)));
     }
 
     @Test
