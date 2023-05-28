@@ -58,4 +58,19 @@ export class ItemsService {
   deleteCategory(id: number): Observable<any> {
     return this.http.delete<any>('/api/categories/' + id);
   }
+
+  exportItems(ids?: number[], categories?: string[]): Observable<Blob> {
+    const data = {
+      ids,
+      categories
+    };
+    return this.http.post('/api/exportItems', data, { responseType: 'blob' });
+  }
+
+  exportBullets(ids?: number[]): Observable<Blob> {
+    const data = {
+      ids
+    };
+    return this.http.post('/api/exportBullets', data, { responseType: 'blob' });
+  }
 }

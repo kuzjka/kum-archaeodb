@@ -34,6 +34,11 @@ export class ItemListComponent implements OnInit {
 
   @ViewChild(MatSort) sort?: MatSort;
 
+  ngOnInit(): void {
+    this.getCategories();
+    this.getItems(this.currentPage, this.pageSize, this.selectedCategories, this.currentSort, this.currentOrder);
+  }
+
   public handleFilter(category: string) {
     if (this.selectedCategories.length == 0) {
       this.selectedCategories.push(category);
@@ -64,7 +69,7 @@ export class ItemListComponent implements OnInit {
   getCategories() {
     this.service.getCategoryNames().subscribe(data => {
       this.categories = data;
-    })
+    });
   }
 
   getItems(page: number, size: number, categories: string[], sort: string, order: string) {
@@ -74,7 +79,7 @@ export class ItemListComponent implements OnInit {
       this.totalPages = data.totalPages;
       this.getPages();
       this.currentPage = 0;
-    })
+    });
   }
 
   getPages() {
@@ -84,8 +89,39 @@ export class ItemListComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-    this.getCategories();
-    this.getItems(this.currentPage, this.pageSize, this.selectedCategories, this.currentSort, this.currentOrder);
+  /**
+   * Requests for CSV with items. If items are filtered by categories, the result is also filtered.
+   */
+  exportItems() {
+    this.service.exportItems(undefined, this.selectedCategories).subscribe(blob => {
+      this.downloadBlob(blob, 'items.csv');
+    });
+  }
+
+  /**
+   * Requests for CSV with bullets.
+   */
+  exportBullets() {
+    this.service.exportBullets().subscribe( blob => {
+      this.downloadBlob(blob, 'bullets.csv');
+    });
+  }
+
+  /**
+   * Creates a temporary link for BLOB and clicks it to download.
+   * @param blob      BLOB to download
+   * @param filename  File name
+   */
+  downloadBlob(blob: Blob, filename: string) {
+    const link = document.createElement('a');
+    link.setAttribute('style', 'display: none');
+    document.body.appendChild(link);
+
+    const url = window.URL.createObjectURL(blob);
+    link.href = url;
+    link.download = filename;
+    link.click();
+    window.URL.revokeObjectURL(url);
+    link.parentNode!.removeChild(link);
   }
 }
