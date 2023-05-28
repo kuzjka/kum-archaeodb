@@ -57,7 +57,7 @@ public class ItemsController {
         return itemsService.confirmParsed(dtoList);
     }
 
-    @PostMapping("/exportItems")
+    @PostMapping(value = "/exportItems", produces = "application/octet-stream")
     public byte[] exportItems(@RequestBody ItemExportRequest request) {
         List<Integer> ids = request.getIds();
         if (ids != null && ids.isEmpty()) ids = null;
@@ -68,7 +68,7 @@ public class ItemsController {
         return itemExportService.exportItems(ids, categories);
     }
 
-    @PostMapping("/exportBullets")
+    @PostMapping(value = "/exportBullets", produces = "application/octet-stream")
     public byte[] exportBullets(@RequestBody BulletExportRequest request) {
         List<Integer> ids = request.getIds();
         if (ids != null && ids.isEmpty()) ids = null;

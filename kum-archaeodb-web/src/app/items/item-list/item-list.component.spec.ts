@@ -7,9 +7,14 @@ import { MatButtonModule } from "@angular/material/button";
 import { of } from "rxjs";
 import { Bullet, Item } from "../items.model";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatSortModule} from "@angular/material/sort";
-import {MatChipsModule} from "@angular/material/chips";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatMenuModule } from "@angular/material/menu";
+import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
+import { MatButtonHarness } from "@angular/material/button/testing";
+import { MatMenuItemHarness } from "@angular/material/menu/testing";
+import { MatChipOptionHarness } from "@angular/material/chips/testing";
 
 describe('ItemListComponent', () => {
   let component: ItemListComponent;
@@ -73,7 +78,12 @@ describe('ItemListComponent', () => {
   ];
 
   beforeEach(async () => {
-    itemsServiceSpy = jasmine.createSpyObj('ItemsService', ['getItems', 'getCategoryNames'])
+    itemsServiceSpy = jasmine.createSpyObj('ItemsService', [
+      'getItems',
+      'getCategoryNames',
+      'exportItems',
+      'exportBullets'
+    ]);
     itemsServiceSpy.getItems.and.returnValue(of({
       totalPages: 2,
       totalCount: 4,
@@ -84,12 +94,14 @@ describe('ItemListComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ ItemListComponent ],
       imports: [
-        MatButtonModule,
-        MatTableModule,
         NoopAnimationsModule,
+
+        MatButtonModule,
+        MatChipsModule,
+        MatMenuModule,
         MatPaginatorModule,
         MatSortModule,
-        MatChipsModule
+        MatTableModule
       ],
       providers: [
         { provide: ItemsService, useValue: itemsServiceSpy }
@@ -104,5 +116,50 @@ describe('ItemListComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should export items no filters', async () => {
+    const loader = TestbedHarnessEnvironment.loader(fixture);
+    const rootLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+
+    const exportBtn = await loader.getHarness(MatButtonHarness.with({ text: RegExp('Експортувати') }));
+    await exportBtn.click();
+
+    /* use root loader, because menu overlay is outside the component root element */
+    const exportItemsBtn = await rootLoader.getHarness(MatMenuItemHarness.with({ text: 'Всі знахідки' }));
+    await exportItemsBtn.click();
+
+    expect(itemsServiceSpy.exportItems).toHaveBeenCalledWith(jasmine.falsy(), jasmine.empty());
+  });
+
+  it('should export items filtered by categories', async() => {
+    const loader = TestbedHarnessEnvironment.loader(fixture);
+    const rootLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+
+    const categoryChip = await loader.getHarness(MatChipOptionHarness.with({ text: 'Category 1'}));
+    await categoryChip.select();
+
+    const exportBtn = await loader.getHarness(MatButtonHarness.with({ text: RegExp('Експортувати') }));
+    await exportBtn.click();
+
+    /* use root loader, because menu overlay is outside the component root element */
+    const exportItemsBtn = await rootLoader.getHarness(MatMenuItemHarness.with({ text: 'Всі знахідки' }));
+    await exportItemsBtn.click();
+
+    expect(itemsServiceSpy.exportItems).toHaveBeenCalledWith(jasmine.falsy(), ['Category 1']);
+  });
+
+  it('should export bullets', async () => {
+    const loader = TestbedHarnessEnvironment.loader(fixture);
+    const rootLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+
+    const exportBtn = await loader.getHarness(MatButtonHarness.with({ text: RegExp('Експортувати') }));
+    await exportBtn.click();
+
+    /* use root loader, because menu overlay is outside the component root element */
+    const exportBulletsBtn = await rootLoader.getHarness(MatMenuItemHarness.with({ text: 'Всі кулі' }));
+    await exportBulletsBtn.click();
+
+    expect(itemsServiceSpy.exportBullets).toHaveBeenCalledWith();
   });
 });

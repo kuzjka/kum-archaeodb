@@ -6,11 +6,11 @@
 
 Page object is usually returned for table views with paginations. Type of the content is specific for each request. Page object adds total count of the elements and pages to the returned list.
 
-|Field|Type|Description|
-|---|---|---|
-|**totalCount**|number|Total number of elements|
-|**totalPages**|number|Total number of pages for current settings|
-|**content**|Array<?>|List of elements for this page|
+| Field          | Type       | Description                                |
+|----------------|------------|--------------------------------------------|
+| **totalCount** | number     | Total number of elements                   |
+| **totalPages** | number     | Total number of pages for current settings |
+| **content**    | Array\<?\> | List of elements for this page             |
 
 ##### Location
 
@@ -188,8 +188,8 @@ Resulting items are an intersection of both filtered sets.
 
 | Field          | Type            | Description                                                                                        |
 |----------------|-----------------|----------------------------------------------------------------------------------------------------|
-| **ids**        | Array<number>   | Item IDs to export. Optional. If absent or empty - exports all items                               |
-| **categories** | Array<string>   | Comma-separated list of categories to filter. Optional. If absent or empty - no filtering is made. |
+| **ids**        | Array\<number\> | Item IDs to export. Optional. If absent or empty - exports all items                               |
+| **categories** | Array\<string\> | Comma-separated list of categories to filter. Optional. If absent or empty - no filtering is made. |
 
 #### Response
 
@@ -207,9 +207,9 @@ Filtering by IDs may be added. Non-existing IDs are ignored.
 
 **Content-Type: application/json**
 
-| Field   | Type          | Description                                                                   |
-|---------|---------------|-------------------------------------------------------------------------------|
-| **ids** | Array<number> | Bullet IDs to export. Optional. If absent or empty - all bullets are exported |
+| Field   | Type            | Description                                                                   |
+|---------|-----------------|-------------------------------------------------------------------------------|
+| **ids** | Array\<number\> | Bullet IDs to export. Optional. If absent or empty - all bullets are exported |
 
 #### Response
 
